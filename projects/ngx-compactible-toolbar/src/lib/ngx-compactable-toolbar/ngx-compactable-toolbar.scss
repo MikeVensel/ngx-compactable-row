@@ -1,0 +1,12 @@
+:host {
+	display: flex;
+	align-items: center;
+	min-width: 0;
+}
+
+.toolbar-items {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  overflow: hidden;
+}

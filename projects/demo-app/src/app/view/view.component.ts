@@ -1,0 +1,56 @@
+import { Component, signal } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { CompactableToolbarDefinition, NgxCompactableToolbar } from 'ngx-compactible-toolbar';
+
+@Component({
+  selector: 'app-view',
+  imports: [MatToolbarModule, MatButtonModule, MatIcon, NgxCompactableToolbar],
+  templateUrl: './view.component.html',
+  styleUrl: './view.component.scss',
+})
+export class ViewComponent {
+  toolbarbuttonDefintions: CompactableToolbarDefinition = {
+    items: [
+      {
+        label: 'Share',
+        alwaysAppearInMenu: false,
+        icon: 'share',
+        tooltip: 'Share this item',
+        click: () => alert('Share clicked'),
+        render: signal(true), // todo making this a signal didn't work
+        disabled: signal(false), // todo making this a signal didn't work
+      },
+      {
+        label: 'Favorite',
+        alwaysAppearInMenu: false,
+        icon: 'favorite',
+        tooltip: 'Favorite this item',
+        click: () => alert('Favorite clicked'),
+        render: signal(true), // todo making this a signal didn't work
+        disabled: signal(false), // todo making this a signal didn't work
+      },
+      {
+        label: 'Account',
+        alwaysAppearInMenu: false,
+        icon: 'account_circle',
+        tooltip: 'Account settings',
+        click: () => alert('Account clicked'),
+        render: signal(true), // todo making this a signal didn't work
+        disabled: signal(false), // todo making this a signal didn't work
+      },
+      {
+        label: 'Visibility',
+        alwaysAppearInMenu: false,
+        icon: 'visibility',
+        tooltip: 'Visibility settings',
+        click: () => alert('Visibility clicked'),
+        render: signal(true), // todo making this a signal didn't work
+        disabled: signal(false), // todo making this a signal didn't work
+      },
+    ],
+  };
+
+  constructor() {}
+}

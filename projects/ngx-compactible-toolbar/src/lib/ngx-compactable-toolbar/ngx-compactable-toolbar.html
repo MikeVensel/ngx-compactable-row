@@ -1,0 +1,29 @@
+<div class="toolbar-items">
+  @for (item of rootItems(); track item) {
+    @if (item.render()) {
+      <button
+        mat-icon-button
+        [disabled]="item.disabled?.()"
+        [matTooltip]="item.tooltip"
+        (click)="item.click()"
+        [ngx-compactable-toolbar-button-observer]="item"
+      >
+        <mat-icon [fontIcon]="item.icon"></mat-icon>
+      </button>
+    }
+  }
+  @if (showMenu()) {
+    <button mat-icon-button [matMenuTriggerFor]="moreMenu" observer>
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  }
+  <mat-menu #moreMenu="matMenu">
+    <ng-template matMenuContent>
+      @for (item of menuItems(); track item) {
+        <button mat-menu-item [disabled]="item.disabled?.()" (click)="item.click()">
+          <span>{{ item.label }}</span>
+        </button>
+      }
+    </ng-template>
+  </mat-menu>
+</div>
