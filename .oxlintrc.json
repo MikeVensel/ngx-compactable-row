@@ -1,0 +1,92 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["jsdoc"],
+  "jsPlugins": [
+    {
+      "name": "jsdoc-js",
+      "specifier": "eslint-plugin-jsdoc"
+    }
+  ],
+  "categories": {},
+  "rules": {
+    "jsdoc/check-access": "warn",
+    "jsdoc/check-property-names": "warn",
+    "jsdoc/check-tag-names": "warn",
+    "jsdoc/empty-tags": "warn",
+    "jsdoc/require-param": "warn",
+    "jsdoc/require-param-description": "warn",
+    "jsdoc/require-param-name": "warn",
+    "jsdoc/require-returns": "warn",
+    "jsdoc/require-returns-description": "warn",
+    "jsdoc-js/require-jsdoc": [
+      "warn",
+      {
+        "publicOnly": false,
+        "require": {
+          "FunctionDeclaration": true,
+          "MethodDefinition": false,
+          "ClassDeclaration": true,
+          "ArrowFunctionExpression": false,
+          "FunctionExpression": false
+        },
+        "contexts": [
+          "TSInterfaceDeclaration",
+          "TSPropertySignature",
+          "PropertyDefinition:not([accessibility=\"private\"]):not([accessibility=\"protected\"])",
+          "MethodDefinition:not([key.name=/^ng/]):not([kind=\"constructor\"]):not([accessibility=\"private\"]):not([accessibility=\"protected\"]) > FunctionExpression"
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["**/*.spec.ts", "projects/demo-app/**/*.ts"],
+      "rules": {
+        "jsdoc/check-access": "off",
+        "jsdoc/check-property-names": "off",
+        "jsdoc/check-tag-names": "off",
+        "jsdoc/empty-tags": "off",
+        "jsdoc/require-param": "off",
+        "jsdoc/require-param-description": "off",
+        "jsdoc/require-param-name": "off",
+        "jsdoc/require-returns": "off",
+        "jsdoc/require-returns-description": "off",
+        "jsdoc-js/require-jsdoc": "off"
+      }
+    }
+  ],
+  "settings": {
+    "jsx-a11y": {
+      "polymorphicPropName": null,
+      "components": {},
+      "attributes": {}
+    },
+    "next": {
+      "rootDir": []
+    },
+    "react": {
+      "formComponents": [],
+      "linkComponents": [],
+      "version": null,
+      "componentWrapperFunctions": []
+    },
+    "jsdoc": {
+      "ignorePrivate": true,
+      "ignoreInternal": true,
+      "ignoreReplacesDocs": true,
+      "overrideReplacesDocs": true,
+      "augmentsExtendsReplacesDocs": false,
+      "implementsReplacesDocs": false,
+      "exemptDestructuredRootsFromChecks": false,
+      "tagNamePreference": {}
+    },
+    "vitest": {
+      "typecheck": false
+    }
+  },
+  "env": {
+    "builtin": true
+  },
+  "globals": {},
+  "ignorePatterns": []
+}

@@ -20,6 +20,7 @@ import { ButtonObserverDirective } from '../button-observer.directive';
 import { MatIconButton } from '@angular/material/button';
 import { ObserverDirective } from '../observer.directive';
 
+/** The compactable toolbar component. */
 @Component({
   selector: 'ngx-compactable-toolbar',
   imports: [
@@ -34,20 +35,27 @@ import { ObserverDirective } from '../observer.directive';
   styleUrls: ['./ngx-compactable-toolbar.scss'],
 })
 export class NgxCompactableToolbar implements AfterViewInit, OnDestroy {
+  /** Toolbar definition. */
   toolbarDefinition = input.required<CompactableToolbarDefinition>();
 
+  /** Reference to all elements with the @see ButtonObserverDirective */
   toolbarButtonObservers = viewChildren(ButtonObserverDirective);
+  /** Reference to the menu button element with the @see ObserverDirective */
   menuButtonObserver = viewChild(ObserverDirective);
 
+  /** Current toolbar items. */
   items = signal<ToolbarItem[]>([]);
+  /** Root toolbar items. */
   rootItems = computed(() => {
     const rootItems = this.items().filter((item) => !item.isInMenu);
     return rootItems;
   });
+  /** Menu toolbar items. */
   menuItems = computed(() => {
     const menuItems = this.items().filter((item) => item.isInMenu);
     return menuItems;
   });
+  /** Indicates whether the menu should be shown. */
   showMenu = computed(
     () => this.menuItems().length > 0 && this.menuItems().some((i) => i.render()),
   );

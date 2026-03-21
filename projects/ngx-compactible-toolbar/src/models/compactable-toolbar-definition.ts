@@ -1,9 +1,12 @@
 import type { Signal } from '@angular/core';
 
+/** Definition for a compactable toolbar. */
 export interface CompactableToolbarDefinition {
+  /** Array of toolbar items to include. */
   items: CompactableToolbarItemDefinition[];
 }
 
+/** Definition for a compactable toolbar item. */
 export interface CompactableToolbarItemDefinition {
   /**
    * Whether the button should always appear in the more menu.
