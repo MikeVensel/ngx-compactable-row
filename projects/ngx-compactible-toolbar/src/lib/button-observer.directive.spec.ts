@@ -24,7 +24,8 @@ class MockIntersectionObserver implements IntersectionObserver {
 }
 
 @Component({
-  template: '<button libButtonObserver (visibilityChange)="onVisibilityChange($event)"></button>',
+  template:
+    '<button libButtonObserver (visibilityChange)="onVisibilityChange($event)"></button>',
   imports: [ButtonObserverDirective],
 })
 class TestHostComponent {

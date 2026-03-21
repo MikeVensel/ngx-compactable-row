@@ -58,7 +58,8 @@ export class NgxCompactableToolbar implements AfterViewInit, OnDestroy {
   });
   /** Indicates whether the menu should be shown. */
   showMenu = computed(
-    () => this.menuItems().length > 0 && this.menuItems().some((i) => i.render()),
+    () =>
+      this.menuItems().length > 0 && this.menuItems().some((i) => i.render()),
   );
 
   private readonly elementRef = inject(ElementRef);
@@ -69,11 +70,13 @@ export class NgxCompactableToolbar implements AfterViewInit, OnDestroy {
 
   constructor() {
     explicitEffect([this.toolbarDefinition], ([toolbarDefinition]) => {
-      const items: ToolbarItem[] = toolbarDefinition.items.map((item, index) => ({
-        ...item,
-        id: index,
-        isInMenu: item.alwaysAppearInMenu ?? false,
-      }));
+      const items: ToolbarItem[] = toolbarDefinition.items.map(
+        (item, index) => ({
+          ...item,
+          id: index,
+          isInMenu: item.alwaysAppearInMenu ?? false,
+        }),
+      );
 
       this.items.set(items);
     });
@@ -91,7 +94,8 @@ export class NgxCompactableToolbar implements AfterViewInit, OnDestroy {
       });
 
       this.resizeObserver.observe(
-        this.elementRef.nativeElement.parentElement ?? this.elementRef.nativeElement,
+        this.elementRef.nativeElement.parentElement ??
+          this.elementRef.nativeElement,
       );
     };
 
@@ -162,7 +166,9 @@ export class NgxCompactableToolbar implements AfterViewInit, OnDestroy {
       }
     } else {
       // Growing: try to restore menu items to root, leftmost hidden item first
-      let remainingMenuCount = updated.filter((i) => i.isInMenu && !i.alwaysAppearInMenu).length;
+      let remainingMenuCount = updated.filter(
+        (i) => i.isInMenu && !i.alwaysAppearInMenu,
+      ).length;
       for (let i = 0; i < updated.length; i++) {
         const item = updated[i];
         if (!item.isInMenu || item.alwaysAppearInMenu) continue;

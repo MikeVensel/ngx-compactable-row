@@ -1,4 +1,7 @@
-import { CompactableToolbarDefinition, NgxCompactableToolbar } from 'ngx-compactible-toolbar';
+import {
+  CompactableToolbarDefinition,
+  NgxCompactableToolbar,
+} from 'ngx-compactible-toolbar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
