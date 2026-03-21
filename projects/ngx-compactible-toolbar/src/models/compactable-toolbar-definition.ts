@@ -19,7 +19,7 @@ export interface CompactableToolbarItemDefinition {
   /**
    * Condition that disables the button.
    */
-  disabled?: Signal<boolean>;
+  disabled: Signal<boolean>;
   /** Icon for the button when it is in the root. */
   icon: string;
   /** Label for the button when it is in the more menu. */

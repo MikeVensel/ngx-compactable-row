@@ -11,6 +11,8 @@ import { Component, signal } from '@angular/core';
   styleUrl: './view.component.scss',
 })
 export class ViewComponent {
+  private shareDisabledWriteable = signal(false);
+
   toolbarbuttonDefintions: CompactableToolbarDefinition = {
     items: [
       {
@@ -19,8 +21,8 @@ export class ViewComponent {
         icon: 'share',
         tooltip: 'Share this item',
         click: () => alert('Share clicked'),
-        render: signal(true), // todo making this a signal didn't work
-        disabled: signal(false), // todo making this a signal didn't work
+        render: signal(true),
+        disabled: this.shareDisabledWriteable,
       },
       {
         label: 'Favorite',
@@ -28,8 +30,8 @@ export class ViewComponent {
         icon: 'favorite',
         tooltip: 'Favorite this item',
         click: () => alert('Favorite clicked'),
-        render: signal(true), // todo making this a signal didn't work
-        disabled: signal(false), // todo making this a signal didn't work
+        render: signal(true),
+        disabled: signal(false),
       },
       {
         label: 'Account',
@@ -37,8 +39,8 @@ export class ViewComponent {
         icon: 'account_circle',
         tooltip: 'Account settings',
         click: () => alert('Account clicked'),
-        render: signal(true), // todo making this a signal didn't work
-        disabled: signal(false), // todo making this a signal didn't work
+        render: signal(true),
+        disabled: signal(false),
       },
       {
         label: 'Visibility',
@@ -46,11 +48,15 @@ export class ViewComponent {
         icon: 'visibility',
         tooltip: 'Visibility settings',
         click: () => alert('Visibility clicked'),
-        render: signal(true), // todo making this a signal didn't work
-        disabled: signal(false), // todo making this a signal didn't work
+        render: signal(true),
+        disabled: signal(false),
       },
     ],
   };
 
-  constructor() {}
+  onClickClose(): void {
+    this.shareDisabledWriteable.update((isDisabled) => {
+      return !isDisabled;
+    });
+  }
 }

@@ -3,7 +3,7 @@
     @if (item.render()) {
       <button
         mat-icon-button
-        [disabled]="item.disabled?.()"
+        [disabled]="item.disabled()"
         [matTooltip]="item.tooltip"
         (click)="item.click()"
         [ngx-compactable-toolbar-button-observer]="item"
@@ -20,7 +20,7 @@
   <mat-menu #moreMenu="matMenu">
     <ng-template matMenuContent>
       @for (item of menuItems(); track item) {
-        <button mat-menu-item [disabled]="item.disabled?.()" (click)="item.click()">
+        <button mat-menu-item [disabled]="item.disabled()" (click)="item.click()">
           <span>{{ item.label }}</span>
         </button>
       }
