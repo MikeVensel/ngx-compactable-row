@@ -1,3 +1,8 @@
+import { explicitEffect } from 'ngxtension/explicit-effect';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton } from '@angular/material/button';
 import {
   type AfterViewInit,
   Component,
@@ -10,15 +15,11 @@ import {
   viewChild,
   viewChildren,
 } from '@angular/core';
-import { MatIcon } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatTooltip } from '@angular/material/tooltip';
-import { explicitEffect } from 'ngxtension/explicit-effect';
-import { type CompactableToolbarDefinition } from '../../models/compactable-toolbar-definition';
-import type { ToolbarItem } from '../../models/toolbar-item';
-import { ButtonObserverDirective } from '../button-observer.directive';
-import { MatIconButton } from '@angular/material/button';
+
 import { ObserverDirective } from '../observer.directive';
+import { ButtonObserverDirective } from '../button-observer.directive';
+import type { ToolbarItem } from '../../models/toolbar-item';
+import { type CompactableToolbarDefinition } from '../../models/compactable-toolbar-definition';
 
 /** The compactable toolbar component. */
 @Component({

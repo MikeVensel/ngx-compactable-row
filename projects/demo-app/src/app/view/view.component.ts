@@ -1,8 +1,8 @@
-import { Component, signal } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { CompactableToolbarDefinition, NgxCompactableToolbar } from 'ngx-compactible-toolbar';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIcon } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-view',

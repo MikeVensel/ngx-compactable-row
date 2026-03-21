@@ -1,15 +1,15 @@
 {
-	"name": "ngx-compactible-toolbar",
-	"version": "0.0.1",
-	"peerDependencies": {
-		"@angular/cdk": "^21.2.0",
-		"@angular/common": "^21.2.0",
-		"@angular/core": "^21.2.0",
-		"@angular/material": "^21.2.0",
-		"ngxtension": "^7.2.0"
-	},
-	"dependencies": {
-		"tslib": "^2.3.0"
-	},
-	"sideEffects": false
+  "name": "ngx-compactible-toolbar",
+  "version": "0.0.1",
+  "sideEffects": false,
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "peerDependencies": {
+    "@angular/cdk": "^21.2.0",
+    "@angular/common": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@angular/material": "^21.2.0",
+    "ngxtension": "^7.2.0"
+  }
 }

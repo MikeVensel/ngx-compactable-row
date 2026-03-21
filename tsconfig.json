@@ -8,9 +8,7 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "paths": {
-      "ngx-compactible-toolbar": [
-        "./dist/ngx-compactible-toolbar"
-      ]
+      "ngx-compactible-toolbar": ["./dist/ngx-compactible-toolbar"]
     },
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,

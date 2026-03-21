@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Component, signal } from '@angular/core';
+
 import { ViewComponent } from './view/view.component';
 
 @Component({

@@ -8,6 +8,7 @@ import {
   output,
   signal,
 } from '@angular/core';
+
 import type { ToolbarItem } from '../models/toolbar-item';
 
 /** Button observer directive. */
