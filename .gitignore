@@ -42,3 +42,12 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Yarn verry related
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
