@@ -8,13 +8,13 @@
       "request": "launch",
       "preLaunchTask": "npm: start",
       "postDebugTask": "kill ng serve",
-      "url": "http://localhost:4200/",
+      "url": "http://localhost:4200/"
     },
     {
       "name": "Launch demo in edge",
       "type": "msedge",
       "request": "launch",
-      "url": "http://localhost:4200/",
+      "url": "http://localhost:4200/"
     },
     {
       "name": "ng test",
@@ -22,7 +22,7 @@
       "request": "launch",
       "preLaunchTask": "npm: test",
       "postDebugTask": "kill ng test",
-      "url": "http://localhost:9876/debug.html",
-    },
-  ],
+      "url": "http://localhost:9876/debug.html"
+    }
+  ]
 }

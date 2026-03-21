@@ -2,13 +2,13 @@
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "oxc.fmt.configPath": ".oxfmtrc.json",
   "js/ts.preferences.quoteStyle": "single",
   "prettier.singleQuote": true,
   "editor.tabSize": 2,
   "[javascript]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
-
   "[typescript]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
@@ -18,5 +18,6 @@
   "[json]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file"
 }

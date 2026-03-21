@@ -12,13 +12,13 @@
         "background": {
           "activeOnStart": true,
           "beginsPattern": {
-            "regexp": "Changes detected",
+            "regexp": "Changes detected"
           },
           "endsPattern": {
-            "regexp": "bundle generation (complete|failed)",
-          },
-        },
-      },
+            "regexp": "bundle generation (complete|failed)"
+          }
+        }
+      }
     },
     {
       "type": "npm",
@@ -30,13 +30,13 @@
         "background": {
           "activeOnStart": true,
           "beginsPattern": {
-            "regexp": "Changes detected",
+            "regexp": "Changes detected"
           },
           "endsPattern": {
-            "regexp": "bundle generation (complete|failed)",
-          },
-        },
-      },
+            "regexp": "bundle generation (complete|failed)"
+          }
+        }
+      }
     },
     {
       "label": "kill ng serve",
@@ -45,9 +45,9 @@
       "args": ["-c", "fuser -k 4200/tcp >/dev/null 2>&1 || true"],
       "linux": {
         "command": "/bin/sh",
-        "args": ["-c", "fuser -k 4200/tcp >/dev/null 2>&1 || true"],
+        "args": ["-c", "fuser -k 4200/tcp >/dev/null 2>&1 || true"]
       },
-      "problemMatcher": [],
+      "problemMatcher": []
     },
     {
       "label": "kill ng test",
@@ -56,9 +56,9 @@
       "args": ["-c", "fuser -k 9876/tcp >/dev/null 2>&1 || true"],
       "linux": {
         "command": "/bin/sh",
-        "args": ["-c", "fuser -k 9876/tcp >/dev/null 2>&1 || true"],
+        "args": ["-c", "fuser -k 9876/tcp >/dev/null 2>&1 || true"]
       },
-      "problemMatcher": [],
-    },
-  ],
+      "problemMatcher": []
+    }
+  ]
 }
