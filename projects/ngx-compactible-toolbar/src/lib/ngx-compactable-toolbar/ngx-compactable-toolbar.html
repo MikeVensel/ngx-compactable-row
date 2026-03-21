@@ -20,9 +20,11 @@
   <mat-menu #moreMenu="matMenu">
     <ng-template matMenuContent>
       @for (item of menuItems(); track item) {
-        <button mat-menu-item [disabled]="item.disabled()" (click)="item.click()">
-          <span>{{ item.label }}</span>
-        </button>
+        @if (item.render()) {
+          <button mat-menu-item [disabled]="item.disabled()" (click)="item.click()">
+            <span>{{ item.label }}</span>
+          </button>
+        }
       }
     </ng-template>
   </mat-menu>
