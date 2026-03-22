@@ -7,40 +7,62 @@ import {
   type AfterViewInit,
   Component,
   computed,
+  contentChildren,
   ElementRef,
+  effect,
   inject,
   input,
   type OnDestroy,
   signal,
+  untracked,
   viewChild,
   viewChildren,
 } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 
 import { ObserverDirective } from '../observer.directive';
+import { NgxCompactableToolbarProjectedItemObserverDirective } from '../ngx-compactable-toolbar-projected-item-observer.directive';
+import { NgxCompactableToolbarItemDirective } from '../ngx-compactable-toolbar-item.directive';
 import { ButtonObserverDirective } from '../button-observer.directive';
 import type { ToolbarItem } from '../../models/toolbar-item';
 import { type CompactableToolbarDefinition } from '../../models/compactable-toolbar-definition';
+
+/** Describes the state of a projected toolbar item. */
+interface ProjectedItemState {
+  /** Item Id. */
+  id: number;
+  /** Indicates whether the item is currently in the menu. */
+  isInMenu: boolean;
+}
 
 /** The compactable toolbar component. */
 @Component({
   selector: 'ngx-compactable-toolbar',
   imports: [
+    NgTemplateOutlet,
     MatIconButton,
     MatMenuModule,
     MatIcon,
     MatTooltip,
     ButtonObserverDirective,
     ObserverDirective,
+    NgxCompactableToolbarProjectedItemObserverDirective,
   ],
   templateUrl: './ngx-compactable-toolbar.html',
   styleUrls: ['./ngx-compactable-toolbar.scss'],
 })
 export class NgxCompactableToolbar implements AfterViewInit, OnDestroy {
   /** Toolbar definition. */
-  toolbarDefinition = input.required<CompactableToolbarDefinition>();
+  toolbarDefinition = input<CompactableToolbarDefinition>();
+  /** Projected toolbar items rendered from templates. */
+  projectedItemTemplates = contentChildren(NgxCompactableToolbarItemDirective);
 
   /** Reference to all elements with the @see ButtonObserverDirective */
   toolbarButtonObservers = viewChildren(ButtonObserverDirective);
+  /** Reference to projected toolbar item wrappers for width measurement. */
+  projectedToolbarItemObservers = viewChildren(
+    NgxCompactableToolbarProjectedItemObserverDirective,
+  );
   /** Reference to the menu button element with the @see ObserverDirective */
   menuButtonObserver = viewChild(ObserverDirective);
 
@@ -56,29 +78,85 @@ export class NgxCompactableToolbar implements AfterViewInit, OnDestroy {
     const menuItems = this.items().filter((item) => item.isInMenu);
     return menuItems;
   });
+  /** Indicates whether projected-template mode is active. */
+  projectedMode = computed(() => this.projectedItemTemplates().length > 0);
+  /** Projected item states tracked for compacting behavior. */
+  projectedItemStates = signal<ProjectedItemState[]>([]);
+  /** Projected toolbar items currently rendered in the root area. */
+  projectedRootItems = computed(() => {
+    const templates = this.projectedItemTemplates();
+    const states = this.projectedItemStates();
+    return templates
+      .map((template, index) => ({
+        id: index,
+        isInMenu: states[index]?.isInMenu ?? false,
+        template,
+      }))
+      .filter((item) => !item.isInMenu);
+  });
+  /** Projected toolbar items currently rendered in the overflow menu. */
+  projectedMenuItems = computed(() => {
+    const templates = this.projectedItemTemplates();
+    const states = this.projectedItemStates();
+    return templates
+      .map((template, index) => ({
+        id: index,
+        isInMenu: states[index]?.isInMenu ?? false,
+        template,
+      }))
+      .filter((item) => item.isInMenu);
+  });
   /** Indicates whether the menu should be shown. */
-  showMenu = computed(
-    () =>
-      this.menuItems().length > 0 && this.menuItems().some((i) => i.render()),
-  );
+  showMenu = computed(() => {
+    if (this.projectedMode()) {
+      return this.projectedMenuItems().length > 0;
+    }
+
+    return (
+      this.menuItems().length > 0 && this.menuItems().some((i) => i.render())
+    );
+  });
 
   private readonly elementRef = inject(ElementRef);
   private readonly itemWidths = new Map<number, number>();
+  private readonly projectedItemWidths = new Map<number, number>();
   private resizeObserver?: ResizeObserver;
   private resizeObserverInitFrameId?: number;
   private shouldSkipNextResizeEvent = true;
 
   constructor() {
-    explicitEffect([this.toolbarDefinition], ([toolbarDefinition]) => {
-      const items: ToolbarItem[] = toolbarDefinition.items.map(
-        (item, index) => ({
-          ...item,
-          id: index,
-          isInMenu: item.alwaysAppearInMenu ?? false,
-        }),
+    explicitEffect(
+      [this.toolbarDefinition, this.projectedMode],
+      ([toolbarDefinition, projectedMode]) => {
+        if (projectedMode || !toolbarDefinition) {
+          this.items.set([]);
+          return;
+        }
+
+        const items: ToolbarItem[] = toolbarDefinition.items.map(
+          (item, index) => ({
+            ...item,
+            id: index,
+            isInMenu: item.alwaysAppearInMenu ?? false,
+          }),
+        );
+
+        this.items.set(items);
+      },
+    );
+
+    effect(() => {
+      const templates = this.projectedItemTemplates();
+      const previous = new Map(
+        untracked(this.projectedItemStates).map((state) => [state.id, state]),
       );
 
-      this.items.set(items);
+      this.projectedItemStates.set(
+        templates.map((_, index) => ({
+          id: index,
+          isInMenu: previous.get(index)?.isInMenu ?? false,
+        })),
+      );
     });
   }
 
@@ -90,7 +168,7 @@ export class NgxCompactableToolbar implements AfterViewInit, OnDestroy {
           return;
         }
 
-        this.updateItemVisibilities();
+        this.updateVisibilitiesForActiveMode();
       });
 
       this.resizeObserver.observe(
@@ -134,7 +212,66 @@ export class NgxCompactableToolbar implements AfterViewInit, OnDestroy {
     return parentEl.clientWidth - fixedSiblingsWidth;
   }
 
-  private updateItemVisibilities(): void {
+  private updateVisibilitiesForActiveMode(): void {
+    if (this.projectedMode()) {
+      this.updateProjectedItemVisibilities();
+      return;
+    }
+
+    this.updateDefinitionItemVisibilities();
+  }
+
+  private updateProjectedItemVisibilities(): void {
+    const hostEl = this.elementRef.nativeElement as HTMLElement;
+    const availableWidth = this.getAvailableWidth(hostEl);
+
+    for (const observer of this.projectedToolbarItemObservers()) {
+      const width = observer.width;
+      if (width > 0) {
+        this.projectedItemWidths.set(observer.itemId(), width);
+      }
+    }
+
+    const menuButtonWidth = this.menuButtonObserver()?.width ?? 40;
+    const updated = this.projectedItemStates().map((state) => ({ ...state }));
+
+    let rootWidth =
+      updated
+        .filter((item) => !item.isInMenu)
+        .reduce(
+          (sum, item) => sum + (this.projectedItemWidths.get(item.id) ?? 0),
+          0,
+        ) + (updated.some((item) => item.isInMenu) ? menuButtonWidth : 0);
+
+    if (rootWidth > availableWidth) {
+      for (let i = updated.length - 1; i >= 0; i--) {
+        const item = updated[i];
+        if (item.isInMenu) continue;
+        rootWidth -= this.projectedItemWidths.get(item.id) ?? 0;
+        item.isInMenu = true;
+        if (rootWidth <= availableWidth) break;
+      }
+    } else {
+      let remainingMenuCount = updated.filter((item) => item.isInMenu).length;
+      for (let i = 0; i < updated.length; i++) {
+        const item = updated[i];
+        if (!item.isInMenu) continue;
+        const itemWidth = this.projectedItemWidths.get(item.id) ?? 0;
+        const menuRelease = remainingMenuCount === 1 ? menuButtonWidth : 0;
+        if (rootWidth + itemWidth - menuRelease <= availableWidth) {
+          item.isInMenu = false;
+          rootWidth += itemWidth - menuRelease;
+          remainingMenuCount--;
+        } else {
+          break;
+        }
+      }
+    }
+
+    this.projectedItemStates.set(updated);
+  }
+
+  private updateDefinitionItemVisibilities(): void {
     const hostEl = this.elementRef.nativeElement as HTMLElement;
     const availableWidth = this.getAvailableWidth(hostEl);
 

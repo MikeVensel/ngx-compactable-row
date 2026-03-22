@@ -28,5 +28,67 @@
   <button mat-icon-button (click)="onClickClose()">
     <mat-icon>close</mat-icon>
   </button>
-  <ngx-compactable-toolbar [toolbarDefinition]="toolbarbuttonDefintions"></ngx-compactable-toolbar>
+  <ngx-compactable-toolbar>
+    <ng-template ngxCompactableToolbarItem let-location="location">
+      @if (location === 'menu') {
+        <button
+          mat-menu-item
+          (click)="onShare()"
+          [disabled]="shareDisabledWriteable()"
+          [attr.data-toolbar-location]="location"
+        >
+          <mat-icon>share</mat-icon>
+          <span>Share</span>
+        </button>
+      } @else {
+        <button
+          mat-icon-button
+          (click)="onShare()"
+          [disabled]="shareDisabledWriteable()"
+          [attr.data-toolbar-location]="location"
+        >
+          <mat-icon>share</mat-icon>
+        </button>
+      }
+    </ng-template>
+
+    <ng-template ngxCompactableToolbarItem let-location="location">
+      @if (location === 'menu') {
+        <button mat-menu-item (click)="onFavorite()" [attr.data-toolbar-location]="location">
+          <mat-icon>favorite</mat-icon>
+          <span>Favorite</span>
+        </button>
+      } @else {
+        <button mat-icon-button (click)="onFavorite()" [attr.data-toolbar-location]="location">
+          <mat-icon>favorite</mat-icon>
+        </button>
+      }
+    </ng-template>
+
+    <ng-template ngxCompactableToolbarItem let-location="location">
+      @if (location === 'menu') {
+        <button mat-menu-item (click)="onAccount()" [attr.data-toolbar-location]="location">
+          <mat-icon>account_circle</mat-icon>
+          <span>Account</span>
+        </button>
+      } @else {
+        <button mat-icon-button (click)="onAccount()" [attr.data-toolbar-location]="location">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+      }
+    </ng-template>
+
+    <ng-template ngxCompactableToolbarItem let-location="location">
+      @if (location === 'menu') {
+        <button mat-menu-item (click)="onVisibility()" [attr.data-toolbar-location]="location">
+          <mat-icon>visibility</mat-icon>
+          <span>Visibility</span>
+        </button>
+      } @else {
+        <button mat-icon-button (click)="onVisibility()" [attr.data-toolbar-location]="location">
+          <mat-icon>visibility</mat-icon>
+        </button>
+      }
+    </ng-template>
+  </ngx-compactable-toolbar>
 </mat-toolbar>
