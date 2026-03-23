@@ -7,25 +7,25 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-compactible-toolbar": {
+    "ngx-compactable-row": {
       "projectType": "library",
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
         }
       },
-      "root": "projects/ngx-compactible-toolbar",
-      "sourceRoot": "projects/ngx-compactible-toolbar/src",
+      "root": "projects/ngx-compactable-row",
+      "sourceRoot": "projects/ngx-compactable-row/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
-              "tsConfig": "projects/ngx-compactible-toolbar/tsconfig.lib.prod.json"
+              "tsConfig": "projects/ngx-compactable-row/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/ngx-compactible-toolbar/tsconfig.lib.json"
+              "tsConfig": "projects/ngx-compactable-row/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -33,7 +33,7 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "tsConfig": "projects/ngx-compactible-toolbar/tsconfig.spec.json"
+            "tsConfig": "projects/ngx-compactable-row/tsconfig.spec.json"
           }
         }
       }

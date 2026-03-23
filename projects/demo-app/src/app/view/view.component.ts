@@ -1,7 +1,7 @@
 import {
   NgxCompactableRow,
   NgxCompactableItemDirective,
-} from 'ngx-compactible-toolbar';
+} from 'ngx-compactable-row';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';

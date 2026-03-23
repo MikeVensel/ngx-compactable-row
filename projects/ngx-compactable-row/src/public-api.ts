@@ -1,5 +1,5 @@
 /*
- * Public API Surface of ngx-compactible-toolbar
+ * Public API Surface of ngx-compactable-row
  */
 
 export * from './lib/ngx-compactable-row/ngx-compactable-row';
