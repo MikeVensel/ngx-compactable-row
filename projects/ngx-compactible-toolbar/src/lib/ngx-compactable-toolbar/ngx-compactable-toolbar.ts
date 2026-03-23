@@ -1,5 +1,3 @@
-import { explicitEffect } from 'ngxtension/explicit-effect';
-import { MatTooltip } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
@@ -11,7 +9,6 @@ import {
   ElementRef,
   effect,
   inject,
-  input,
   type OnDestroy,
   signal,
   untracked,
@@ -23,9 +20,6 @@ import { NgTemplateOutlet } from '@angular/common';
 import { ObserverDirective } from '../observer.directive';
 import { NgxCompactableToolbarProjectedItemObserverDirective } from '../ngx-compactable-toolbar-projected-item-observer.directive';
 import { NgxCompactableToolbarItemDirective } from '../ngx-compactable-toolbar-item.directive';
-import { ButtonObserverDirective } from '../button-observer.directive';
-import type { ToolbarItem } from '../../models/toolbar-item';
-import { type CompactableToolbarDefinition } from '../../models/compactable-toolbar-definition';
 
 /** Describes the state of a projected toolbar item. */
 interface ProjectedItemState {
@@ -43,8 +37,6 @@ interface ProjectedItemState {
     MatIconButton,
     MatMenuModule,
     MatIcon,
-    MatTooltip,
-    ButtonObserverDirective,
     ObserverDirective,
     NgxCompactableToolbarProjectedItemObserverDirective,
   ],
@@ -52,34 +44,15 @@ interface ProjectedItemState {
   styleUrls: ['./ngx-compactable-toolbar.scss'],
 })
 export class NgxCompactableToolbar implements AfterViewInit, OnDestroy {
-  /** Toolbar definition. */
-  toolbarDefinition = input<CompactableToolbarDefinition>();
   /** Projected toolbar items rendered from templates. */
   projectedItemTemplates = contentChildren(NgxCompactableToolbarItemDirective);
 
-  /** Reference to all elements with the @see ButtonObserverDirective */
-  toolbarButtonObservers = viewChildren(ButtonObserverDirective);
   /** Reference to projected toolbar item wrappers for width measurement. */
   projectedToolbarItemObservers = viewChildren(
     NgxCompactableToolbarProjectedItemObserverDirective,
   );
   /** Reference to the menu button element with the @see ObserverDirective */
   menuButtonObserver = viewChild(ObserverDirective);
-
-  /** Current toolbar items. */
-  items = signal<ToolbarItem[]>([]);
-  /** Root toolbar items. */
-  rootItems = computed(() => {
-    const rootItems = this.items().filter((item) => !item.isInMenu);
-    return rootItems;
-  });
-  /** Menu toolbar items. */
-  menuItems = computed(() => {
-    const menuItems = this.items().filter((item) => item.isInMenu);
-    return menuItems;
-  });
-  /** Indicates whether projected-template mode is active. */
-  projectedMode = computed(() => this.projectedItemTemplates().length > 0);
   /** Projected item states tracked for compacting behavior. */
   projectedItemStates = signal<ProjectedItemState[]>([]);
   /** Projected toolbar items currently rendered in the root area. */
@@ -107,15 +80,7 @@ export class NgxCompactableToolbar implements AfterViewInit, OnDestroy {
       .filter((item) => item.isInMenu);
   });
   /** Indicates whether the menu should be shown. */
-  showMenu = computed(() => {
-    if (this.projectedMode()) {
-      return this.projectedMenuItems().length > 0;
-    }
-
-    return (
-      this.menuItems().length > 0 && this.menuItems().some((i) => i.render())
-    );
-  });
+  showMenu = computed(() => this.projectedMenuItems().length > 0);
 
   private readonly elementRef = inject(ElementRef);
   private readonly itemWidths = new Map<number, number>();
@@ -125,26 +90,6 @@ export class NgxCompactableToolbar implements AfterViewInit, OnDestroy {
   private shouldSkipNextResizeEvent = true;
 
   constructor() {
-    explicitEffect(
-      [this.toolbarDefinition, this.projectedMode],
-      ([toolbarDefinition, projectedMode]) => {
-        if (projectedMode || !toolbarDefinition) {
-          this.items.set([]);
-          return;
-        }
-
-        const items: ToolbarItem[] = toolbarDefinition.items.map(
-          (item, index) => ({
-            ...item,
-            id: index,
-            isInMenu: item.alwaysAppearInMenu ?? false,
-          }),
-        );
-
-        this.items.set(items);
-      },
-    );
-
     effect(() => {
       const templates = this.projectedItemTemplates();
       const previous = new Map(
@@ -168,7 +113,7 @@ export class NgxCompactableToolbar implements AfterViewInit, OnDestroy {
           return;
         }
 
-        this.updateVisibilitiesForActiveMode();
+        this.updateProjectedItemVisibilities();
       });
 
       this.resizeObserver.observe(
@@ -210,15 +155,6 @@ export class NgxCompactableToolbar implements AfterViewInit, OnDestroy {
       fixedSiblingsWidth += (child as HTMLElement).offsetWidth;
     }
     return parentEl.clientWidth - fixedSiblingsWidth;
-  }
-
-  private updateVisibilitiesForActiveMode(): void {
-    if (this.projectedMode()) {
-      this.updateProjectedItemVisibilities();
-      return;
-    }
-
-    this.updateDefinitionItemVisibilities();
   }
 
   private updateProjectedItemVisibilities(): void {
@@ -269,59 +205,5 @@ export class NgxCompactableToolbar implements AfterViewInit, OnDestroy {
     }
 
     this.projectedItemStates.set(updated);
-  }
-
-  private updateDefinitionItemVisibilities(): void {
-    const hostEl = this.elementRef.nativeElement as HTMLElement;
-    const availableWidth = this.getAvailableWidth(hostEl);
-
-    // Refresh cached widths for all currently-rendered root buttons
-    for (const observer of this.toolbarButtonObservers()) {
-      const w = observer.width;
-      if (w > 0) {
-        this.itemWidths.set(observer.item().id, w);
-      }
-    }
-
-    const menuButtonWidth = this.menuButtonObserver()?.width ?? 40;
-    const updated = this.items().map((i) => ({ ...i }));
-
-    let rootWidth =
-      updated
-        .filter((i) => !i.isInMenu)
-        .reduce((sum, i) => sum + (this.itemWidths.get(i.id) ?? 0), 0) +
-      (this.showMenu() ? menuButtonWidth : 0);
-
-    if (rootWidth > availableWidth) {
-      // Shrinking: move root items into the menu from last to first
-      for (let i = updated.length - 1; i >= 0; i--) {
-        const item = updated[i];
-        if (item.isInMenu || item.alwaysAppearInMenu) continue;
-        rootWidth -= this.itemWidths.get(item.id) ?? 0;
-        item.isInMenu = true;
-        if (rootWidth <= availableWidth) break;
-      }
-    } else {
-      // Growing: try to restore menu items to root, leftmost hidden item first
-      let remainingMenuCount = updated.filter(
-        (i) => i.isInMenu && !i.alwaysAppearInMenu,
-      ).length;
-      for (let i = 0; i < updated.length; i++) {
-        const item = updated[i];
-        if (!item.isInMenu || item.alwaysAppearInMenu) continue;
-        const itemWidth = this.itemWidths.get(item.id) ?? 0;
-        // If this is the last menu item, the menu button also disappears, freeing its space
-        const menuRelease = remainingMenuCount === 1 ? menuButtonWidth : 0;
-        if (rootWidth + itemWidth - menuRelease <= availableWidth) {
-          item.isInMenu = false;
-          rootWidth += itemWidth - menuRelease;
-          remainingMenuCount--;
-        } else {
-          break;
-        }
-      }
-    }
-
-    this.items.set(updated);
   }
 }

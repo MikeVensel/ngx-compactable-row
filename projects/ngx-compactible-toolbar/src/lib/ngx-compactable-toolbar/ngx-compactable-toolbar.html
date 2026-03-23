@@ -1,63 +1,31 @@
 <div class="toolbar-items">
-  @if (projectedMode()) {
-    @for (item of projectedRootItems(); track item.id) {
-      <span
-        class="projected-item-host"
-        [attr.data-toolbar-location]="'toolbar'"
-        [ngxCompactableToolbarProjectedItemObserver]="item.id"
-      >
+  @for (item of projectedRootItems(); track item.id) {
+    <span
+      class="projected-item-host"
+      [attr.data-toolbar-location]="'toolbar'"
+      [ngxCompactableToolbarProjectedItemObserver]="item.id"
+    >
+      <ng-container
+        [ngTemplateOutlet]="item.template.template"
+        [ngTemplateOutletContext]="{ location: 'toolbar', index: item.id }"
+      ></ng-container>
+    </span>
+  }
+
+  @if (showMenu()) {
+    <button mat-icon-button [matMenuTriggerFor]="moreMenu" observer>
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  }
+
+  <mat-menu #moreMenu="matMenu">
+    <ng-template matMenuContent>
+      @for (item of projectedMenuItems(); track item.id) {
         <ng-container
           [ngTemplateOutlet]="item.template.template"
-          [ngTemplateOutletContext]="{ location: 'toolbar', index: item.id }"
+          [ngTemplateOutletContext]="{ location: 'menu', index: item.id }"
         ></ng-container>
-      </span>
-    }
-
-    @if (showMenu()) {
-      <button mat-icon-button [matMenuTriggerFor]="moreMenu" observer>
-        <mat-icon>more_vert</mat-icon>
-      </button>
-    }
-
-    <mat-menu #moreMenu="matMenu">
-      <ng-template matMenuContent>
-        @for (item of projectedMenuItems(); track item.id) {
-          <ng-container
-            [ngTemplateOutlet]="item.template.template"
-            [ngTemplateOutletContext]="{ location: 'menu', index: item.id }"
-          ></ng-container>
-        }
-      </ng-template>
-    </mat-menu>
-  } @else {
-    @for (item of rootItems(); track item) {
-      @if (item.render()) {
-        <button
-          mat-icon-button
-          [disabled]="item.disabled()"
-          [matTooltip]="item.tooltip"
-          (click)="item.click()"
-          [ngx-compactable-toolbar-button-observer]="item"
-        >
-          <mat-icon [fontIcon]="item.icon"></mat-icon>
-        </button>
       }
-    }
-    @if (showMenu()) {
-      <button mat-icon-button [matMenuTriggerFor]="moreMenu" observer>
-        <mat-icon>more_vert</mat-icon>
-      </button>
-    }
-    <mat-menu #moreMenu="matMenu">
-      <ng-template matMenuContent>
-        @for (item of menuItems(); track item) {
-          @if (item.render()) {
-            <button mat-menu-item [disabled]="item.disabled()" (click)="item.click()">
-              <span>{{ item.label }}</span>
-            </button>
-          }
-        }
-      </ng-template>
-    </mat-menu>
-  }
+    </ng-template>
+  </mat-menu>
 </div>
