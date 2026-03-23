@@ -17,9 +17,11 @@ import {
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 
-import { ObserverDirective } from '../observer.directive';
-import { NgxCompactableToolbarProjectedItemObserverDirective } from '../ngx-compactable-toolbar-projected-item-observer.directive';
-import { NgxCompactableToolbarItemDirective } from '../ngx-compactable-toolbar-item.directive';
+import { NgxCompactableProjectedItemObserverDirective } from '../ngx-compactable-projected-item-observer.directive';
+import { NgxCompactableItemDirective } from '../ngx-compactable-item.directive';
+
+/** Default width for the menu button if it cannot be retrieved from the DOM. */
+const DEFAULT_MENU_BUTTON_WIDTH = 40;
 
 /** Describes the state of a projected toolbar item. */
 interface ProjectedItemState {
@@ -31,28 +33,25 @@ interface ProjectedItemState {
 
 /** The compactable toolbar component. */
 @Component({
-  selector: 'ngx-compactable-toolbar',
+  selector: 'ngx-compactable-row',
   imports: [
     NgTemplateOutlet,
     MatIconButton,
     MatMenuModule,
     MatIcon,
-    ObserverDirective,
-    NgxCompactableToolbarProjectedItemObserverDirective,
+    NgxCompactableProjectedItemObserverDirective,
   ],
-  templateUrl: './ngx-compactable-toolbar.html',
-  styleUrls: ['./ngx-compactable-toolbar.scss'],
+  templateUrl: './ngx-compactable-row.html',
+  styleUrls: ['./ngx-compactable-row.scss'],
 })
-export class NgxCompactableToolbar implements AfterViewInit, OnDestroy {
+export class NgxCompactableRow implements AfterViewInit, OnDestroy {
   /** Projected toolbar items rendered from templates. */
-  projectedItemTemplates = contentChildren(NgxCompactableToolbarItemDirective);
+  projectedItemTemplates = contentChildren(NgxCompactableItemDirective);
 
   /** Reference to projected toolbar item wrappers for width measurement. */
   projectedToolbarItemObservers = viewChildren(
-    NgxCompactableToolbarProjectedItemObserverDirective,
+    NgxCompactableProjectedItemObserverDirective,
   );
-  /** Reference to the menu button element with the @see ObserverDirective */
-  menuButtonObserver = viewChild(ObserverDirective);
   /** Projected item states tracked for compacting behavior. */
   projectedItemStates = signal<ProjectedItemState[]>([]);
   /** Projected toolbar items currently rendered in the root area. */
@@ -83,7 +82,7 @@ export class NgxCompactableToolbar implements AfterViewInit, OnDestroy {
   showMenu = computed(() => this.projectedMenuItems().length > 0);
 
   private readonly elementRef = inject(ElementRef);
-  private readonly itemWidths = new Map<number, number>();
+  private menuButtonElement = viewChild('menuButton', { read: ElementRef});
   private readonly projectedItemWidths = new Map<number, number>();
   private resizeObserver?: ResizeObserver;
   private resizeObserverInitFrameId?: number;
@@ -168,7 +167,7 @@ export class NgxCompactableToolbar implements AfterViewInit, OnDestroy {
       }
     }
 
-    const menuButtonWidth = this.menuButtonObserver()?.width ?? 40;
+    const menuButtonWidth = this.menuButtonElement()?.nativeElement.offsetWidth ?? DEFAULT_MENU_BUTTON_WIDTH;
     const updated = this.projectedItemStates().map((state) => ({ ...state }));
 
     let rootWidth =

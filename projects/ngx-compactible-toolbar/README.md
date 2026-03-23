@@ -31,8 +31,8 @@ This command will compile your project, and the build artifacts will be placed i
 The toolbar now supports projected item templates in addition to `toolbarDefinition`.
 
 ```html
-<ngx-compactable-toolbar>
-   <ng-template ngxCompactableToolbarItem let-location="location" let-index="index">
+<ngx-compactable-row>
+   <ng-template ngxCompactableItem let-location="location" let-index="index">
       @if (location === 'menu') {
          <button mat-menu-item [attr.data-toolbar-location]="location">
             <mat-icon>share</mat-icon>
@@ -44,7 +44,7 @@ The toolbar now supports projected item templates in addition to `toolbarDefinit
          </button>
       }
    </ng-template>
-</ngx-compactable-toolbar>
+</ngx-compactable-row>
 ```
 
 Template context values:

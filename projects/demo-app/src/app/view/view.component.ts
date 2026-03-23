@@ -1,6 +1,6 @@
 import {
-  NgxCompactableToolbar,
-  NgxCompactableToolbarItemDirective,
+  NgxCompactableRow,
+  NgxCompactableItemDirective,
 } from 'ngx-compactible-toolbar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
@@ -15,8 +15,8 @@ import { Component, signal } from '@angular/core';
     MatButtonModule,
     MatMenuModule,
     MatIcon,
-    NgxCompactableToolbar,
-    NgxCompactableToolbarItemDirective,
+    NgxCompactableRow,
+    NgxCompactableItemDirective,
   ],
   templateUrl: './view.component.html',
   styleUrl: './view.component.scss',

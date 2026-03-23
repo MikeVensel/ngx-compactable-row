@@ -3,7 +3,7 @@
     <span
       class="projected-item-host"
       [attr.data-toolbar-location]="'toolbar'"
-      [ngxCompactableToolbarProjectedItemObserver]="item.id"
+      [ngxCompactableProjectedItemObserver]="item.id"
     >
       <ng-container
         [ngTemplateOutlet]="item.template.template"
@@ -13,7 +13,7 @@
   }
 
   @if (showMenu()) {
-    <button mat-icon-button [matMenuTriggerFor]="moreMenu" observer>
+    <button #menuButton mat-icon-button [matMenuTriggerFor]="moreMenu">
       <mat-icon>more_vert</mat-icon>
     </button>
   }

@@ -28,8 +28,8 @@
   <button mat-icon-button (click)="onClickClose()">
     <mat-icon>close</mat-icon>
   </button>
-  <ngx-compactable-toolbar>
-    <ng-template ngxCompactableToolbarItem let-location="location">
+  <ngx-compactable-row>
+    <ng-template ngxCompactableItem let-location="location">
       @if (location === 'menu') {
         <button
           mat-menu-item
@@ -52,7 +52,7 @@
       }
     </ng-template>
 
-    <ng-template ngxCompactableToolbarItem let-location="location">
+    <ng-template ngxCompactableItem let-location="location">
       @if (location === 'menu') {
         <button mat-menu-item (click)="onFavorite()" [attr.data-toolbar-location]="location">
           <mat-icon>favorite</mat-icon>
@@ -65,7 +65,7 @@
       }
     </ng-template>
 
-    <ng-template ngxCompactableToolbarItem let-location="location">
+    <ng-template ngxCompactableItem let-location="location">
       @if (location === 'menu') {
         <button mat-menu-item (click)="onAccount()" [attr.data-toolbar-location]="location">
           <mat-icon>account_circle</mat-icon>
@@ -78,7 +78,7 @@
       }
     </ng-template>
 
-    <ng-template ngxCompactableToolbarItem let-location="location">
+    <ng-template ngxCompactableItem let-location="location">
       @if (location === 'menu') {
         <button mat-menu-item (click)="onVisibility()" [attr.data-toolbar-location]="location">
           <mat-icon>visibility</mat-icon>
@@ -90,5 +90,5 @@
         </button>
       }
     </ng-template>
-  </ngx-compactable-toolbar>
+  </ngx-compactable-row>
 </mat-toolbar>
