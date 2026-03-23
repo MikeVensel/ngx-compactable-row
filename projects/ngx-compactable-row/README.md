@@ -1,4 +1,4 @@
-# NgxCompactibleToolbar
+# NgxCompactableRow
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.0.
 
@@ -21,10 +21,38 @@ ng generate --help
 To build the library, run:
 
 ```bash
-ng build ngx-compactible-toolbar
+ng build ngx-compactable-row
 ```
 
 This command will compile your project, and the build artifacts will be placed in the `dist/` directory.
+
+## Projected Toolbar Items
+
+The toolbar now supports projected item templates in addition to `toolbarDefinition`.
+
+```html
+<ngx-compactable-row>
+   <ng-template ngxCompactableItem let-location="location" let-index="index">
+      @if (location === 'menu') {
+         <button mat-menu-item [attr.data-toolbar-location]="location">
+            <mat-icon>share</mat-icon>
+            <span>Share</span>
+         </button>
+      } @else {
+         <button mat-icon-button [attr.data-toolbar-location]="location">
+            <mat-icon>share</mat-icon>
+         </button>
+      }
+   </ng-template>
+</ngx-compactable-row>
+```
+
+Template context values:
+
+- `location`: `'toolbar' | 'menu'`
+- `index`: zero-based item index
+
+When projected templates are present, the component automatically compacts items into the overflow menu and passes `location` so you can render different markup and set attributes accordingly.
 
 ### Publishing the Library
 
@@ -33,7 +61,7 @@ Once the project is built, you can publish your library by following these steps
 1. Navigate to the `dist` directory:
 
    ```bash
-   cd dist/ngx-compactible-toolbar
+   cd dist/ngx-compactable-row
    ```
 
 2. Run the `npm publish` command to publish your library to the npm registry:

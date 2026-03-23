@@ -1,5 +1,5 @@
 {
-  "name": "ngx-compactible-toolbar",
+  "name": "ngx-compactable-row",
   "version": "0.0.1",
   "sideEffects": false,
   "dependencies": {

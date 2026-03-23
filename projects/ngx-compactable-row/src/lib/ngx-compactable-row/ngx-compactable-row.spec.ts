@@ -1,17 +1,17 @@
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NgxCompactableToolbar } from './ngx-compactable-toolbar';
+import { NgxCompactableRow } from './ngx-compactable-row';
 
-describe('NgxCompactableToolbar', () => {
-  let component: NgxCompactableToolbar;
-  let fixture: ComponentFixture<NgxCompactableToolbar>;
+describe('NgxCompactableRow', () => {
+  let component: NgxCompactableRow;
+  let fixture: ComponentFixture<NgxCompactableRow>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NgxCompactableToolbar],
+      imports: [NgxCompactableRow],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NgxCompactableToolbar);
+    fixture = TestBed.createComponent(NgxCompactableRow);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

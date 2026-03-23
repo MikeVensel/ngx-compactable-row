@@ -5647,9 +5647,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ngx-mat-compactable-toolbar@workspace:.":
+"ngx-mat-compactable-row@workspace:.":
   version: 0.0.0-use.local
-  resolution: "ngx-mat-compactable-toolbar@workspace:."
+  resolution: "ngx-mat-compactable-row@workspace:."
   dependencies:
     "@angular/build": "npm:^21.2.3"
     "@angular/cdk": "npm:^21.2.3"

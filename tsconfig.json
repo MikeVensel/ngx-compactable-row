@@ -8,7 +8,7 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "paths": {
-      "ngx-compactible-toolbar": ["./dist/ngx-compactible-toolbar"]
+      "ngx-compactable-row": ["./dist/ngx-compactable-row"]
     },
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
@@ -27,10 +27,10 @@
   "files": [],
   "references": [
     {
-      "path": "./projects/ngx-compactible-toolbar/tsconfig.lib.json"
+      "path": "./projects/ngx-compactable-row/tsconfig.lib.json"
     },
     {
-      "path": "./projects/ngx-compactible-toolbar/tsconfig.spec.json"
+      "path": "./projects/ngx-compactable-row/tsconfig.spec.json"
     },
     {
       "path": "./projects/demo-app/tsconfig.app.json"

@@ -1,0 +1,31 @@
+<div class="toolbar-items">
+  @for (item of projectedRootItems(); track item.id) {
+    <span
+      class="projected-item-host"
+      [attr.data-toolbar-location]="'toolbar'"
+      [ngxCompactableProjectedItemObserver]="item.id"
+    >
+      <ng-container
+        [ngTemplateOutlet]="item.template.template"
+        [ngTemplateOutletContext]="{ location: 'toolbar', index: item.id }"
+      ></ng-container>
+    </span>
+  }
+
+  @if (showMenu()) {
+    <button #menuButton mat-icon-button [matMenuTriggerFor]="moreMenu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  }
+
+  <mat-menu #moreMenu="matMenu">
+    <ng-template matMenuContent>
+      @for (item of projectedMenuItems(); track item.id) {
+        <ng-container
+          [ngTemplateOutlet]="item.template.template"
+          [ngTemplateOutletContext]="{ location: 'menu', index: item.id }"
+        ></ng-container>
+      }
+    </ng-template>
+  </mat-menu>
+</div>
