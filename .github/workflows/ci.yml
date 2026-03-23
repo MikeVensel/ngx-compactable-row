@@ -39,4 +39,5 @@ jobs:
       - uses: DerYeger/yarn-setup-action@master
         with:
           node-version: 24.11.0
+      - run: yarn build:lib
       - run: yarn test
