@@ -5,8 +5,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "build:lib": "ng build --project ngx-compactable-row",
+    "watch:lib": "ng build --project ngx-compactable-row --watch --configuration development",
     "test": "ng test",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
