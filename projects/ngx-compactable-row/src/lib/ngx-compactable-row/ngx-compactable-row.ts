@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 
-import { NgxCompactableProjectedItemObserverDirective } from '../ngx-compactable-projected-item-observer.directive';
+import { NgxCompactableProjectedItemDirective } from '../ngx-compactable-projected-item.directive';
 import { NgxCompactableItemDirective } from '../ngx-compactable-item.directive';
 
 /** Default width for the menu button if it cannot be retrieved from the DOM. */
@@ -39,7 +39,7 @@ interface ProjectedItemState {
     MatIconButton,
     MatMenuModule,
     MatIcon,
-    NgxCompactableProjectedItemObserverDirective,
+    NgxCompactableProjectedItemDirective,
   ],
   templateUrl: './ngx-compactable-row.html',
   styleUrls: ['./ngx-compactable-row.scss'],
@@ -50,7 +50,7 @@ export class NgxCompactableRow implements AfterViewInit, OnDestroy {
 
   /** Reference to projected toolbar item wrappers for width measurement. */
   projectedToolbarItemObservers = viewChildren(
-    NgxCompactableProjectedItemObserverDirective,
+    NgxCompactableProjectedItemDirective,
   );
   /** Projected item states tracked for compacting behavior. */
   projectedItemStates = signal<ProjectedItemState[]>([]);
@@ -82,7 +82,7 @@ export class NgxCompactableRow implements AfterViewInit, OnDestroy {
   showMenu = computed(() => this.projectedMenuItems().length > 0);
 
   private readonly elementRef = inject(ElementRef);
-  private menuButtonElement = viewChild('menuButton', { read: ElementRef});
+  private menuButtonElement = viewChild('menuButton', { read: ElementRef });
   private readonly projectedItemWidths = new Map<number, number>();
   private resizeObserver?: ResizeObserver;
   private resizeObserverInitFrameId?: number;
@@ -167,7 +167,9 @@ export class NgxCompactableRow implements AfterViewInit, OnDestroy {
       }
     }
 
-    const menuButtonWidth = this.menuButtonElement()?.nativeElement.offsetWidth ?? DEFAULT_MENU_BUTTON_WIDTH;
+    const menuButtonWidth =
+      this.menuButtonElement()?.nativeElement.offsetWidth ??
+      DEFAULT_MENU_BUTTON_WIDTH;
     const updated = this.projectedItemStates().map((state) => ({ ...state }));
 
     let rootWidth =

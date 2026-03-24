@@ -2,12 +2,12 @@ import { Directive, ElementRef, inject, input } from '@angular/core';
 
 /** Directive to observe a projected toolbar item for width changes. */
 @Directive({
-  selector: '[ngxCompactableProjectedItemObserver]',
+  selector: '[ngxCompactableProjectedItem]',
 })
-export class NgxCompactableProjectedItemObserverDirective {
+export class NgxCompactableProjectedItemDirective {
   /** The ID of the projected toolbar item. */
   readonly itemId = input.required<number>({
-    alias: 'ngxCompactableProjectedItemObserver',
+    alias: 'ngxCompactableProjectedItem',
   });
 
   private readonly elementRef = inject(ElementRef<HTMLElement>);
