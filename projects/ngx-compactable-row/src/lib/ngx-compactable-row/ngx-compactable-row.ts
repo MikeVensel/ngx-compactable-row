@@ -14,6 +14,7 @@ import {
   untracked,
   viewChild,
   viewChildren,
+  input,
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 
@@ -31,6 +32,9 @@ interface ProjectedItemState {
   isInMenu: boolean;
 }
 
+/** Menu button position in the row. */
+export type MenuButtonPosition = 'start' | 'end';
+
 /** The compactable toolbar component. */
 @Component({
   selector: 'ngx-compactable-row',
@@ -45,6 +49,8 @@ interface ProjectedItemState {
   styleUrls: ['./ngx-compactable-row.scss'],
 })
 export class NgxCompactableRow implements AfterViewInit, OnDestroy {
+  /** Position of the menu button in the row. Defaults to end. */
+  menuButtonPosition = input<MenuButtonPosition>('end');
   /** Projected toolbar items rendered from templates. */
   projectedItemTemplates = contentChildren(NgxCompactableItemDirective);
 

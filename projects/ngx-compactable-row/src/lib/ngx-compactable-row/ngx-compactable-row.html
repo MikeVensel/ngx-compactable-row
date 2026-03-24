@@ -1,4 +1,18 @@
 <div class="toolbar-items">
+  <!-- Start menu button template. -->
+  <ng-template #menuTriggerTemplate>
+    @if (showMenu()) {
+      <button #menuButton mat-icon-button [matMenuTriggerFor]="moreMenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    }
+  </ng-template>
+  <!-- End menu button template. -->
+
+  @if (menuButtonPosition() === 'start') {
+    <ng-container [ngTemplateOutlet]="menuTriggerTemplate"></ng-container>
+  }
+
   @for (item of projectedRootItems(); track item.id) {
     <span
       class="projected-item-host"
@@ -12,10 +26,8 @@
     </span>
   }
 
-  @if (showMenu()) {
-    <button #menuButton mat-icon-button [matMenuTriggerFor]="moreMenu">
-      <mat-icon>more_vert</mat-icon>
-    </button>
+  @if (menuButtonPosition() === 'end') {
+    <ng-container [ngTemplateOutlet]="menuTriggerTemplate"></ng-container>
   }
 
   <mat-menu #moreMenu="matMenu">
