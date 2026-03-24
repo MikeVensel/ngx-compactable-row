@@ -181,11 +181,18 @@ export class NgxCompactableRow implements AfterViewInit, OnDestroy {
         ) + (updated.some((item) => item.isInMenu) ? menuButtonWidth : 0);
 
     if (rootWidth > availableWidth) {
+      let hasMenuItem = updated.some((item) => item.isInMenu);
       for (let i = updated.length - 1; i >= 0; i--) {
         const item = updated[i];
         if (item.isInMenu) continue;
         rootWidth -= this.projectedItemWidths.get(item.id) ?? 0;
         item.isInMenu = true;
+
+        if (!hasMenuItem) {
+          rootWidth += menuButtonWidth;
+          hasMenuItem = true;
+        }
+
         if (rootWidth <= availableWidth) break;
       }
     } else {

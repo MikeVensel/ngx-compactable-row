@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
 
-import { NgxCompactableItemDirective } from '../ngx-compactable-item.directive';
 import { NgxCompactableRow } from './ngx-compactable-row';
+import { NgxCompactableItemDirective } from '../ngx-compactable-item.directive';
 
 @Component({
   imports: [NgxCompactableRow, NgxCompactableItemDirective],
@@ -10,8 +10,16 @@ import { NgxCompactableRow } from './ngx-compactable-row';
     <div class="host-wrapper">
       <ngx-compactable-row>
         @for (item of items; track item) {
-          <ng-template ngxCompactableItem let-location="location" let-index="index">
-            <span class="projected-item" [attr.data-location]="location" [attr.data-index]="index">
+          <ng-template
+            ngxCompactableItem
+            let-location="location"
+            let-index="index"
+          >
+            <span
+              class="projected-item"
+              [attr.data-location]="location"
+              [attr.data-index]="index"
+            >
               {{ item }}
             </span>
           </ng-template>
@@ -41,7 +49,8 @@ describe('NgxCompactableRow', () => {
 
     fixture = TestBed.createComponent(HostComponent);
     fixture.detectChanges();
-    rowComponent = fixture.debugElement.children[0].children[0].componentInstance as NgxCompactableRow;
+    rowComponent = fixture.debugElement.children[0].children[0]
+      .componentInstance as NgxCompactableRow;
   });
 
   afterEach(() => {
@@ -50,7 +59,9 @@ describe('NgxCompactableRow', () => {
 
   it('creates projected states for all projected items', () => {
     expect(rowComponent).toBeTruthy();
-    expect(rowComponent.projectedItemStates().map((state) => state.id)).toEqual([0, 1, 2]);
+    expect(rowComponent.projectedItemStates().map((state) => state.id)).toEqual(
+      [0, 1, 2],
+    );
     expect(rowComponent.projectedRootItems().length).toBe(3);
     expect(rowComponent.projectedMenuItems().length).toBe(0);
     expect(rowComponent.showMenu()).toBe(false);
@@ -62,8 +73,12 @@ describe('NgxCompactableRow', () => {
 
     recomputeLayout();
 
-    expect(rowComponent.projectedRootItems().map((item) => item.id)).toEqual([0, 1]);
-    expect(rowComponent.projectedMenuItems().map((item) => item.id)).toEqual([2]);
+    expect(rowComponent.projectedRootItems().map((item) => item.id)).toEqual([
+      0,
+    ]);
+    expect(rowComponent.projectedMenuItems().map((item) => item.id)).toEqual([
+      1, 2,
+    ]);
     expect(rowComponent.showMenu()).toBe(true);
   });
 
@@ -72,12 +87,16 @@ describe('NgxCompactableRow', () => {
     setProjectedWidths([80, 80, 80]);
 
     recomputeLayout();
-    expect(rowComponent.projectedMenuItems().map((item) => item.id)).toEqual([2]);
+    expect(rowComponent.projectedMenuItems().map((item) => item.id)).toEqual([
+      1, 2,
+    ]);
 
     setParentWidth(260);
     recomputeLayout();
 
-    expect(rowComponent.projectedRootItems().map((item) => item.id)).toEqual([0, 1, 2]);
+    expect(rowComponent.projectedRootItems().map((item) => item.id)).toEqual([
+      0, 1, 2,
+    ]);
     expect(rowComponent.projectedMenuItems().length).toBe(0);
     expect(rowComponent.showMenu()).toBe(false);
   });
@@ -87,19 +106,47 @@ describe('NgxCompactableRow', () => {
     setProjectedWidths([80, 80, 80]);
 
     recomputeLayout();
-    expect(rowComponent.projectedMenuItems().map((item) => item.id)).toEqual([2]);
+    expect(rowComponent.projectedMenuItems().map((item) => item.id)).toEqual([
+      1, 2,
+    ]);
 
     setParentWidth(239);
     recomputeLayout();
-    expect(rowComponent.projectedMenuItems().map((item) => item.id)).toEqual([2]);
+    expect(rowComponent.projectedMenuItems().map((item) => item.id)).toEqual([
+      2,
+    ]);
 
     setParentWidth(240);
     recomputeLayout();
     expect(rowComponent.projectedMenuItems().length).toBe(0);
   });
 
+  it('accounts for menu button width at in-between breakpoints during compaction', () => {
+    setProjectedWidths([80, 80, 80]);
+
+    setParentWidth(199);
+    recomputeLayout();
+    expect(rowComponent.projectedRootItems().map((item) => item.id)).toEqual([
+      0,
+    ]);
+    expect(rowComponent.projectedMenuItems().map((item) => item.id)).toEqual([
+      1, 2,
+    ]);
+
+    setParentWidth(200);
+    recomputeLayout();
+    expect(rowComponent.projectedRootItems().map((item) => item.id)).toEqual([
+      0, 1,
+    ]);
+    expect(rowComponent.projectedMenuItems().map((item) => item.id)).toEqual([
+      2,
+    ]);
+  });
+
   function setParentWidth(width: number): void {
-    const rowElement = fixture.nativeElement.querySelector('ngx-compactable-row') as HTMLElement;
+    const rowElement = fixture.nativeElement.querySelector(
+      'ngx-compactable-row',
+    ) as HTMLElement;
     const parentElement = rowElement.parentElement as HTMLElement;
     Object.defineProperty(parentElement, 'clientWidth', {
       configurable: true,
@@ -108,7 +155,9 @@ describe('NgxCompactableRow', () => {
   }
 
   function setProjectedWidths(widths: number[]): void {
-    const projectedHosts = fixture.nativeElement.querySelectorAll('.projected-item-host') as NodeListOf<HTMLElement>;
+    const projectedHosts = fixture.nativeElement.querySelectorAll(
+      '.projected-item-host',
+    ) as NodeListOf<HTMLElement>;
     projectedHosts.forEach((host, index) => {
       Object.defineProperty(host, 'offsetWidth', {
         configurable: true,
