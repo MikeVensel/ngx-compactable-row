@@ -124,7 +124,7 @@ describe('NgxCompactableRow', () => {
   it('accounts for menu button width at in-between breakpoints during compaction', () => {
     setProjectedWidths([80, 80, 80]);
 
-    setParentWidth(199);
+    setParentWidth(207);
     recomputeLayout();
     expect(rowComponent.projectedRootItems().map((item) => item.id)).toEqual([
       0,
@@ -133,7 +133,7 @@ describe('NgxCompactableRow', () => {
       1, 2,
     ]);
 
-    setParentWidth(200);
+    setParentWidth(208);
     recomputeLayout();
     expect(rowComponent.projectedRootItems().map((item) => item.id)).toEqual([
       0, 1,

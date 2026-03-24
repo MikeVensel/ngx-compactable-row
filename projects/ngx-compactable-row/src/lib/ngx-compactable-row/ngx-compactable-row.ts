@@ -22,7 +22,7 @@ import { NgxCompactableProjectedItemDirective } from '../ngx-compactable-project
 import { NgxCompactableItemDirective } from '../ngx-compactable-item.directive';
 
 /** Default width for the menu button if it cannot be retrieved from the DOM. */
-const DEFAULT_MENU_BUTTON_WIDTH = 40;
+const DEFAULT_MENU_BUTTON_WIDTH = 48;
 
 /** Describes the state of a projected toolbar item. */
 interface ProjectedItemState {
