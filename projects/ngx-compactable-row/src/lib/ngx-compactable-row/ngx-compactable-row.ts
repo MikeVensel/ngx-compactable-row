@@ -170,20 +170,26 @@ export class NgxCompactableRow implements AfterViewInit, OnDestroy {
     const menuButtonWidth =
       this.menuButtonElement()?.nativeElement.offsetWidth ??
       DEFAULT_MENU_BUTTON_WIDTH;
-    const updated = this.projectedItemStates().map((state) => ({ ...state }));
+    // Copy the projected items state without changing the originals.
+    const projectedItemStatesCopy = this.projectedItemStates().map((state) => ({
+      ...state,
+    }));
 
     let rootWidth =
-      updated
+      projectedItemStatesCopy
         .filter((item) => !item.isInMenu)
         .reduce(
           (sum, item) => sum + (this.projectedItemWidths.get(item.id) ?? 0),
           0,
-        ) + (updated.some((item) => item.isInMenu) ? menuButtonWidth : 0);
+        ) +
+      (projectedItemStatesCopy.some((item) => item.isInMenu)
+        ? menuButtonWidth
+        : 0);
 
     if (rootWidth > availableWidth) {
-      let hasMenuItem = updated.some((item) => item.isInMenu);
-      for (let i = updated.length - 1; i >= 0; i--) {
-        const item = updated[i];
+      let hasMenuItem = projectedItemStatesCopy.some((item) => item.isInMenu);
+      for (let i = projectedItemStatesCopy.length - 1; i >= 0; i--) {
+        const item = projectedItemStatesCopy[i];
         if (item.isInMenu) continue;
         rootWidth -= this.projectedItemWidths.get(item.id) ?? 0;
         item.isInMenu = true;
@@ -196,9 +202,11 @@ export class NgxCompactableRow implements AfterViewInit, OnDestroy {
         if (rootWidth <= availableWidth) break;
       }
     } else {
-      let remainingMenuCount = updated.filter((item) => item.isInMenu).length;
-      for (let i = 0; i < updated.length; i++) {
-        const item = updated[i];
+      let remainingMenuCount = projectedItemStatesCopy.filter(
+        (item) => item.isInMenu,
+      ).length;
+      for (let i = 0; i < projectedItemStatesCopy.length; i++) {
+        const item = projectedItemStatesCopy[i];
         if (!item.isInMenu) continue;
         const itemWidth = this.projectedItemWidths.get(item.id) ?? 0;
         const menuRelease = remainingMenuCount === 1 ? menuButtonWidth : 0;
@@ -212,6 +220,6 @@ export class NgxCompactableRow implements AfterViewInit, OnDestroy {
       }
     }
 
-    this.projectedItemStates.set(updated);
+    this.projectedItemStates.set(projectedItemStatesCopy);
   }
 }
