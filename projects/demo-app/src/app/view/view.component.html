@@ -10,19 +10,55 @@
   </button>
   <span>My App</span>
   <span class="example-spacer"></span>
-  <button mat-icon-button>
-    <mat-icon>search</mat-icon>
-  </button>
-  <button mat-icon-button>
-    <mat-icon>notifications</mat-icon>
-  </button>
-  <button mat-icon-button>
-    <mat-icon>settings</mat-icon>
-  </button>
-  <button mat-icon-button (click)="onClickClose()">
-    <mat-icon>close</mat-icon>
-  </button>
   <ngx-compactable-row>
+    <ng-template ngxCompactableItem let-location="location">
+      @if (location === 'menu') {
+        <button mat-menu-item [attr.data-toolbar-location]="location">
+          <mat-icon>refresh</mat-icon>
+          <span>Refresh</span>
+        </button>
+      } @else {
+        <button mat-icon-button [attr.data-toolbar-location]="location">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      }
+    </ng-template>
+    <ng-template ngxCompactableItem let-location="location">
+      @if (location === 'menu') {
+        <button mat-menu-item [attr.data-toolbar-location]="location">
+          <mat-icon>print</mat-icon>
+          <span>Print</span>
+        </button>
+      } @else {
+        <button mat-icon-button [attr.data-toolbar-location]="location">
+          <mat-icon>print</mat-icon>
+        </button>
+      }
+    </ng-template>
+    <ng-template ngxCompactableItem let-location="location">
+      @if (location === 'menu') {
+        <button mat-menu-item [attr.data-toolbar-location]="location">
+          <mat-icon>file_download</mat-icon>
+          <span>Download</span>
+        </button>
+      } @else {
+        <button mat-icon-button [attr.data-toolbar-location]="location">
+          <mat-icon>file_download</mat-icon>
+        </button>
+      }
+    </ng-template>
+    <ng-template ngxCompactableItem let-location="location">
+      @if (location === 'menu') {
+        <button mat-menu-item [attr.data-toolbar-location]="location">
+          <mat-icon>close</mat-icon>
+          <span>Close</span>
+        </button>
+      } @else {
+        <button mat-icon-button (click)="onClickClose()" [attr.data-toolbar-location]="location">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </ng-template>
     <ng-template ngxCompactableItem let-location="location">
       @if (location === 'menu') {
         <button
