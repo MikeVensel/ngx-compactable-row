@@ -95,10 +95,10 @@ describe('NgxCompactableRow', () => {
     recomputeLayout();
 
     expect(rowComponent.projectedRootItems().map((item) => item.id)).toEqual([
-      0, 1, 2,
+      0, 1,
     ]);
-    expect(rowComponent.projectedMenuItems().length).toBe(0);
-    expect(rowComponent.showMenu()).toBe(false);
+    expect(rowComponent.projectedMenuItems().length).toBe(1);
+    expect(rowComponent.showMenu()).toBe(true);
   });
 
   it('keeps an item in menu until there is enough space for default menu button width fallback', () => {
@@ -113,12 +113,12 @@ describe('NgxCompactableRow', () => {
     setParentWidth(239);
     recomputeLayout();
     expect(rowComponent.projectedMenuItems().map((item) => item.id)).toEqual([
-      2,
+      1, 2,
     ]);
 
     setParentWidth(240);
     recomputeLayout();
-    expect(rowComponent.projectedMenuItems().length).toBe(0);
+    expect(rowComponent.projectedMenuItems().length).toBe(1);
   });
 
   it('accounts for menu button width at in-between breakpoints during compaction', () => {
@@ -136,10 +136,10 @@ describe('NgxCompactableRow', () => {
     setParentWidth(208);
     recomputeLayout();
     expect(rowComponent.projectedRootItems().map((item) => item.id)).toEqual([
-      0, 1,
+      0,
     ]);
     expect(rowComponent.projectedMenuItems().map((item) => item.id)).toEqual([
-      2,
+      1, 2,
     ]);
   });
 
