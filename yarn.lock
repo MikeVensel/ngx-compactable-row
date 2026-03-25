@@ -220,6 +220,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@angular/animations@npm:^21.1.0":
+  version: 21.2.5
+  resolution: "@angular/animations@npm:21.2.5"
+  dependencies:
+    tslib: "npm:^2.3.0"
+  peerDependencies:
+    "@angular/core": 21.2.5
+  checksum: 10c0/1926d8199512cde4f399a915b50e096d6c13ea183fab31d035e05b6245b543deaf960ceeb0f8b6110a7e8c51e16935d3297e7fc13d37ce60453d4c3fa692fb71
+  languageName: node
+  linkType: hard
+
 "@angular/build@npm:^21.2.3":
   version: 21.2.3
   resolution: "@angular/build@npm:21.2.3"
@@ -5651,6 +5662,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "ngx-mat-compactable-row@workspace:."
   dependencies:
+    "@angular/animations": "npm:^21.1.0"
     "@angular/build": "npm:^21.2.3"
     "@angular/cdk": "npm:^21.2.3"
     "@angular/cli": "npm:^21.1.2"
