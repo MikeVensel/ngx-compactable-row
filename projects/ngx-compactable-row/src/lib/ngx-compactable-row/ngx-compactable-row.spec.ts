@@ -9,15 +9,18 @@ import { NgxCompactableItemDirective } from '../ngx-compactable-item.directive';
   template: `
     <div class="host-wrapper">
       <ngx-compactable-row>
-        @for (item of items; track item) {
+        @for (item of items; track item; let index = $index) {
           <ng-template
             ngxCompactableItem
+            [priority]="priorities[index]"
             let-location="location"
+            let-priority="priority"
             let-index="index"
           >
             <span
               class="projected-item"
               [attr.data-location]="location"
+              [attr.data-priority]="priority"
               [attr.data-index]="index"
             >
               {{ item }}
@@ -30,6 +33,7 @@ import { NgxCompactableItemDirective } from '../ngx-compactable-item.directive';
 })
 class HostComponent {
   items = ['One', 'Two', 'Three'];
+  priorities = [30, 20, 10];
 }
 
 describe('NgxCompactableRow', () => {
@@ -65,6 +69,16 @@ describe('NgxCompactableRow', () => {
     expect(rowComponent.projectedRootItems().length).toBe(3);
     expect(rowComponent.projectedMenuItems().length).toBe(0);
     expect(rowComponent.showMenu()).toBe(false);
+  });
+
+  it('exposes the directive priority in the template context', () => {
+    const projectedItems = fixture.nativeElement.querySelectorAll(
+      '.projected-item',
+    ) as NodeListOf<HTMLElement>;
+
+    expect(
+      Array.from(projectedItems, (item) => item.getAttribute('data-priority')),
+    ).toEqual(['30', '20', '10']);
   });
 
   it('moves trailing items into menu when available width shrinks', () => {

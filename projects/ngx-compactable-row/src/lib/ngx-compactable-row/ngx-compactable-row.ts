@@ -23,7 +23,7 @@ import { NgxCompactableItemDirective } from '../ngx-compactable-item.directive';
 /** Default width for the menu button if it cannot be retrieved from the DOM. */
 const DEFAULT_MENU_BUTTON_WIDTH = 48;
 
-// /** Describes the state of a projected toolbar item. */
+/** Describes the state of a projected toolbar item. */
 interface ProjectedItemState {
   /** Item Id. */
   id: number;
@@ -189,6 +189,10 @@ export class NgxCompactableRow implements AfterViewInit {
       ...state,
     }));
 
+    const sortedProjectedItems = [...projectedItemStatesCopy].sort(
+      (a, b) => b.template.priority() - a.template.priority() || a.id - b.id, // Preserve original order for items with the same priority
+    );
+
     let rootWidth =
       projectedItemStatesCopy
         .filter((item) => !item.isInMenu)
@@ -201,9 +205,9 @@ export class NgxCompactableRow implements AfterViewInit {
         : 0);
 
     if (rootWidth > availableWidth) {
-      let hasMenuItem = projectedItemStatesCopy.some((item) => item.isInMenu);
-      for (let i = projectedItemStatesCopy.length - 1; i >= 0; i--) {
-        const item = projectedItemStatesCopy[i];
+      let hasMenuItem = sortedProjectedItems.some((item) => item.isInMenu);
+      for (let i = sortedProjectedItems.length - 1; i >= 0; i--) {
+        const item = sortedProjectedItems[i];
         if (item.isInMenu) continue;
         rootWidth -= this.projectedItemWidths.get(item.id) ?? 0;
         item.isInMenu = true;
@@ -216,11 +220,11 @@ export class NgxCompactableRow implements AfterViewInit {
         if (rootWidth <= availableWidth) break;
       }
     } else {
-      let remainingMenuCount = projectedItemStatesCopy.filter(
+      let remainingMenuCount = sortedProjectedItems.filter(
         (item) => item.isInMenu,
       ).length;
-      for (let i = 0; i < projectedItemStatesCopy.length; i++) {
-        const item = projectedItemStatesCopy[i];
+      for (let i = 0; i < sortedProjectedItems.length; i++) {
+        const item = sortedProjectedItems[i];
         if (!item.isInMenu) continue;
         const itemWidth = this.projectedItemWidths.get(item.id) ?? 0;
         const menuRelease = remainingMenuCount === 1 ? menuButtonWidth : 0;

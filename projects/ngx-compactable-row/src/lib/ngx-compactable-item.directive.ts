@@ -1,4 +1,4 @@
-import { Directive, inject, TemplateRef } from '@angular/core';
+import { Directive, inject, input, TemplateRef } from '@angular/core';
 
 export type NgxCompactableItemLocation = 'toolbar' | 'menu';
 
@@ -9,18 +9,29 @@ export interface NgxCompactableItemContext {
    */
   location: NgxCompactableItemLocation;
   /**
+   * Priority for the item template.
+   * Items with a higher priority will stay in the root row longer than items with a lower priority.
+   */
+  priority: number;
+  /**
    * The index of the toolbar item within its location.
    */
   index: number;
 }
 
 /**
- * Directive to mark a template as a compactable toolbar item. This directive allows you to define a template that can be rendered in either the toolbar or the overflow menu, depending on the available space. The template receives a context that indicates where it is being rendered and its index within that location.
+ * Directive to mark a template as a compactable toolbar item. This directive allows you to define a template that can be rendered in either the toolbar or the overflow menu, depending on the available space. The template receives a context that indicates where it is displayed and its index within that location.
  */
 @Directive({
   selector: 'ng-template[ngxCompactableItem]',
 })
 export class NgxCompactableItemDirective {
+  /**
+   * Priority exposed back to the template context.
+   * Items with a higher priority will stay in the root row longer than items with a lower priority.
+   */
+  readonly priority = input(0);
+
   /** The template reference for the compactable toolbar item. */
   readonly template = inject(TemplateRef<NgxCompactableItemContext>);
 }
