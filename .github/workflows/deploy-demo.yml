@@ -26,6 +26,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: prepare
     steps:
+      - uses: DerYeger/yarn-setup-action@master
+        with:
+          node-version: 24.11.0
       - run: yarn build:lib
       - run: yarn build:demo --base-href=/${{ github.event.repository.name }}/
       - name: 'upload'
