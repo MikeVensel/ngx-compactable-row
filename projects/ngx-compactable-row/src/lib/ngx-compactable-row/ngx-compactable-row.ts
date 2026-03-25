@@ -1,4 +1,3 @@
-import { injectResize } from 'ngxtension/resize';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
@@ -96,7 +95,9 @@ export class NgxCompactableRow implements AfterViewInit {
   private readonly elementRef = inject(ElementRef);
   private menuButtonElement = viewChild('menuButton', { read: ElementRef });
   private readonly projectedItemWidths = new Map<number, number>();
-  private resize$ = injectResize({ emitInitialResult: true });
+  private resizeObserver?: ResizeObserver;
+  private resizeObserverInitFrameId?: number;
+  private shouldSkipNextResizeEvent = true;
 
   constructor() {
     effect(() => {
@@ -115,9 +116,41 @@ export class NgxCompactableRow implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.resize$.subscribe(() => {
-      this.updateProjectedItemVisibilities();
-    });
+    const attachObserver = () => {
+      this.resizeObserver = new ResizeObserver(() => {
+        if (this.shouldSkipNextResizeEvent) {
+          this.shouldSkipNextResizeEvent = false;
+          return;
+        }
+
+        this.updateProjectedItemVisibilities();
+      });
+
+      this.resizeObserver.observe(
+        this.elementRef.nativeElement.parentElement ??
+          this.elementRef.nativeElement,
+      );
+    };
+
+    if (typeof requestAnimationFrame === 'function') {
+      this.resizeObserverInitFrameId = requestAnimationFrame(() => {
+        this.resizeObserverInitFrameId = undefined;
+        attachObserver();
+      });
+      return;
+    }
+
+    attachObserver();
+  }
+
+  ngOnDestroy(): void {
+    if (this.resizeObserverInitFrameId !== undefined) {
+      cancelAnimationFrame(this.resizeObserverInitFrameId);
+      this.resizeObserverInitFrameId = undefined;
+    }
+
+    this.resizeObserver?.disconnect();
+    this.resizeObserver = undefined;
   }
 
   private getAvailableWidth(hostEl: HTMLElement): number {
