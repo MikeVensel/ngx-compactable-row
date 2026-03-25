@@ -10,7 +10,6 @@ import {
   ElementRef,
   effect,
   inject,
-  type OnDestroy,
   signal,
   untracked,
   viewChild,
@@ -49,7 +48,13 @@ export type MenuButtonPosition = 'start' | 'end';
   templateUrl: './ngx-compactable-row.html',
   styleUrls: ['./ngx-compactable-row.scss'],
 })
-export class NgxCompactableRow implements AfterViewInit, OnDestroy {
+export class NgxCompactableRow implements AfterViewInit {
+  /**
+   * Extra buffer space in pixels to be subtracted from the available width when calculating item visibility.
+   *
+   * Defaults to 32.
+   */
+  buffer = input<number>(32);
   /** Position of the menu button in the row. Defaults to end. */
   menuButtonPosition = input<MenuButtonPosition>('end');
   /** Projected toolbar items rendered from templates. */
@@ -131,7 +136,7 @@ export class NgxCompactableRow implements AfterViewInit, OnDestroy {
 
   private updateProjectedItemVisibilities(): void {
     const hostEl = this.elementRef.nativeElement as HTMLElement;
-    const availableWidth = this.getAvailableWidth(hostEl);
+    const availableWidth = this.getAvailableWidth(hostEl) - this.buffer();
 
     for (const observer of this.projectedToolbarItemObservers()) {
       const width = observer.width;
