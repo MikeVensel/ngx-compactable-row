@@ -59,6 +59,63 @@
         "args": ["-c", "fuser -k 9876/tcp >/dev/null 2>&1 || true"]
       },
       "problemMatcher": []
+    },
+    {
+      "label": "Angular Serve",
+      "type": "npm",
+      "script": "watch:all",
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": true
+      },
+      "isBackground": true,
+      "problemMatcher": [
+        {
+          "owner": "typescript",
+          "source": "Angular Serve - TS",
+          "fileLocation": ["relative", "${workspaceFolder}"],
+          "applyTo": "allDocuments",
+          "pattern": {
+            "regexp": "Error: ([^\\s].*)[\\(:](\\d+)[,:](\\d+)(?:\\):\\s+|\\s+-\\s+)(error|warning|info)\\s+TS(\\d+)\\s*:\\s*(.*)",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "severity": 4,
+            "code": 5,
+            "message": 6
+          },
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": "^.*Initial chunk files.*$",
+            "endsPattern": "^.*(?:Compiled successfully|Application bundle generation complete|compiled successfully|Angular Live Development Server is listening).*$"
+          }
+        },
+        {
+          "owner": "ng-cli",
+          "source": "Angular Serve - NG",
+          "fileLocation": "absolute",
+          "applyTo": "allDocuments",
+          "pattern": {
+            "regexp": "^\\s*(?:Error: )?([^\\s].*)[\\(:](\\d+)[,:](\\d+)(?:\\):\\s+|\\s+-\\s+)(error|warning|info)\\s+NG(\\d+)\\s*:\\s*(.*) \\n?in (.*)@(\\d+):(\\d+)$",
+            "file": 7,
+            "line": 8,
+            "column": 9,
+            "severity": 4,
+            "code": 5,
+            "message": 6
+          },
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": ".*",
+            "endsPattern": ".*(Compiled successfully|Application bundle generation complete|compiled successfully).*"
+          }
+        }
+      ]
     }
   ]
 }
