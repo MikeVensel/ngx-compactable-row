@@ -7,7 +7,7 @@
     "start": "ng serve",
     "build:lib": "ng build --project ngx-compactable-row",
     "watch:lib": "ng build --project ngx-compactable-row --watch --configuration development",
-    "build:demo": "ng build --project ngx-compactable-row && ng build --project demo-app",
+    "build:demo": "ng build --project demo-app",
     "test": "ng test --watch false",
     "test:watch": "ng test --watch true",
     "lint": "oxlint",
