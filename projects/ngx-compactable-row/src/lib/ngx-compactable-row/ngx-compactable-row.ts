@@ -201,12 +201,9 @@ export class NgxCompactableRow implements AfterViewInit {
         : 0);
 
     if (rootWidth > availableWidth) {
-      const sortedItems = projectedItemStatesCopy.sort(
-        (a, b) => b.template.priority() - a.template.priority(),
-      );
-      let hasMenuItem = sortedItems.some((item) => item.isInMenu);
-      for (let i = sortedItems.length - 1; i >= 0; i--) {
-        const item = sortedItems[i];
+      let hasMenuItem = projectedItemStatesCopy.some((item) => item.isInMenu);
+      for (let i = projectedItemStatesCopy.length - 1; i >= 0; i--) {
+        const item = projectedItemStatesCopy[i];
         if (item.isInMenu) continue;
         rootWidth -= this.projectedItemWidths.get(item.id) ?? 0;
         item.isInMenu = true;
