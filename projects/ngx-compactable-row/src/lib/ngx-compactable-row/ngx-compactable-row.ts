@@ -23,12 +23,14 @@ import { NgxCompactableItemDirective } from '../ngx-compactable-item.directive';
 /** Default width for the menu button if it cannot be retrieved from the DOM. */
 const DEFAULT_MENU_BUTTON_WIDTH = 48;
 
-/** Describes the state of a projected toolbar item. */
+// /** Describes the state of a projected toolbar item. */
 interface ProjectedItemState {
   /** Item Id. */
   id: number;
   /** Indicates whether the item is currently in the menu. */
   isInMenu: boolean;
+  /** The template for the projected item. */
+  template: NgxCompactableItemDirective;
 }
 
 /** Menu button position in the row. */
@@ -66,7 +68,7 @@ export class NgxCompactableRow implements AfterViewInit {
   /** Projected item states tracked for compacting behavior. */
   projectedItemStates = signal<ProjectedItemState[]>([]);
   /** Projected toolbar items currently rendered in the root area. */
-  projectedRootItems = computed(() => {
+  projectedRootItems = computed<ProjectedItemState[]>(() => {
     const templates = this.projectedItemTemplates();
     const states = this.projectedItemStates();
     return templates
@@ -78,7 +80,7 @@ export class NgxCompactableRow implements AfterViewInit {
       .filter((item) => !item.isInMenu);
   });
   /** Projected toolbar items currently rendered in the overflow menu. */
-  projectedMenuItems = computed(() => {
+  projectedMenuItems = computed<ProjectedItemState[]>(() => {
     const templates = this.projectedItemTemplates();
     const states = this.projectedItemStates();
     return templates
@@ -110,6 +112,7 @@ export class NgxCompactableRow implements AfterViewInit {
         templates.map((_, index) => ({
           id: index,
           isInMenu: previous.get(index)?.isInMenu ?? false,
+          template: templates[index],
         })),
       );
     });
@@ -198,9 +201,12 @@ export class NgxCompactableRow implements AfterViewInit {
         : 0);
 
     if (rootWidth > availableWidth) {
-      let hasMenuItem = projectedItemStatesCopy.some((item) => item.isInMenu);
-      for (let i = projectedItemStatesCopy.length - 1; i >= 0; i--) {
-        const item = projectedItemStatesCopy[i];
+      const sortedItems = projectedItemStatesCopy.sort(
+        (a, b) => b.template.priority() - a.template.priority(),
+      );
+      let hasMenuItem = sortedItems.some((item) => item.isInMenu);
+      for (let i = sortedItems.length - 1; i >= 0; i--) {
+        const item = sortedItems[i];
         if (item.isInMenu) continue;
         rootWidth -= this.projectedItemWidths.get(item.id) ?? 0;
         item.isInMenu = true;
