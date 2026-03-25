@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: 24.11.0
       - run: yarn build:lib
-      - run: yarn build:demo -- --base-href=/${{ github.event.repository.name }}/
+      - run: yarn build:demo --base-href=/${{ github.event.repository.name }}/
       - name: 'upload'
         uses: actions/upload-pages-artifact@v3
         with:
