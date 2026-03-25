@@ -9,7 +9,6 @@
     "@angular/cdk": "^21.2.0",
     "@angular/common": "^21.2.0",
     "@angular/core": "^21.2.0",
-    "@angular/material": "^21.2.0",
-    "ngxtension": "^7.2.0"
+    "@angular/material": "^21.2.0"
   }
 }
