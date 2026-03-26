@@ -16,6 +16,7 @@
     "lint:fix": "oxlint --fix",
     "format": "oxfmt",
     "formt:check": "oxfmt --check",
+    "publish:lib": "yarn build:lib && yarn --cwd dist/ngx-compactable-row npm publish --access public",
     "_rp": "run-p -ln --npm-path yarn"
   },
   "dependencies": {
