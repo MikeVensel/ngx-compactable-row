@@ -49,7 +49,7 @@ jobs:
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     name: Deploy Demo
     runs-on: ubuntu-latest
-    needs: prepare
+    needs: [prepare, build, lint, test]
     steps:
       - uses: DerYeger/yarn-setup-action@master
         with:
