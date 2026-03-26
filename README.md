@@ -3,35 +3,23 @@
 NgxCompactableRow allows you to create a row of button elements which can automatically move into a menu if the screen becomes
 to small.
 
-## Use
 
-Add the `NgxCompactableRow` and `NgxCompactableItemDirective` as imports to either your `app.module.ts` imports or your component's imports if using a standalone component.
+The library's [README.md](./projects/ngx-compactable-row/) in the package contains usage documentation.
 
-Then add a compactable row with any number of elements.
+## Contributing
 
-```html
-<ngx-compactable-row>
-    <ng-template ngxCompactableItem [priority]="1" let-location="location" let-priority="priority">
-      @if (location === 'menu') {
-        <button
-          mat-menu-item
-          (click)="onSave()"
-          [attr.data-toolbar-location]="location"
-        >
-          <mat-icon>save</mat-icon>
-          <span>Save</span>
-        </button>
-      } @else {
-        <button
-          mat-icon-button
-          (click)="onShare()"
-          [attr.data-toolbar-location]="location"
-        >
-          <mat-icon>share</mat-icon>
-        </button>
-      }
-    </ng-template>
-  </ngx-compactable-row>
+This project requires at least node 24.11.0 and yarn. Once installed run the following commands to get started:
+
+```sh
+corepack enable
+yarn # or yarn install
+yarn watch:all # Runs the library build with --watch and ng serve
 ```
 
-Each element should have both a menu template (for use when the item goes into the menu) and a default template which will render the element in the root of the row.
+### Running unit tests
+
+To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+
+```sh
+yarn test
+```
