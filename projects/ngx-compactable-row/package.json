@@ -4,6 +4,7 @@
   "description": "Angular Material compactable row",
   "homepage": "https://github.com/MikeVensel/ngx-compactable-row",
   "license": "MIT",
+  "author": "Mike Vensel",
   "repository": {
     "type": "git",
     "url": "https://github.com/MikeVensel/ngx-compactable-row.git"
