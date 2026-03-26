@@ -2,6 +2,7 @@
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "biome.enabled": false,
   "oxc.fmt.configPath": ".oxfmtrc.json",
   "js/ts.preferences.quoteStyle": "single",
   "prettier.singleQuote": true,

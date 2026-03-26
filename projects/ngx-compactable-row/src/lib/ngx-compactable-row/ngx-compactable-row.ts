@@ -29,6 +29,8 @@ interface ProjectedItemState {
   id: number;
   /** Indicates whether the item is currently in the menu. */
   isInMenu: boolean;
+  /** The template for the projected item. */
+  template: NgxCompactableItemDirective;
 }
 
 /** Menu button position in the row. */
@@ -66,7 +68,7 @@ export class NgxCompactableRow implements AfterViewInit {
   /** Projected item states tracked for compacting behavior. */
   projectedItemStates = signal<ProjectedItemState[]>([]);
   /** Projected toolbar items currently rendered in the root area. */
-  projectedRootItems = computed(() => {
+  projectedRootItems = computed<ProjectedItemState[]>(() => {
     const templates = this.projectedItemTemplates();
     const states = this.projectedItemStates();
     return templates
@@ -78,7 +80,7 @@ export class NgxCompactableRow implements AfterViewInit {
       .filter((item) => !item.isInMenu);
   });
   /** Projected toolbar items currently rendered in the overflow menu. */
-  projectedMenuItems = computed(() => {
+  projectedMenuItems = computed<ProjectedItemState[]>(() => {
     const templates = this.projectedItemTemplates();
     const states = this.projectedItemStates();
     return templates
@@ -110,6 +112,7 @@ export class NgxCompactableRow implements AfterViewInit {
         templates.map((_, index) => ({
           id: index,
           isInMenu: previous.get(index)?.isInMenu ?? false,
+          template: templates[index],
         })),
       );
     });
@@ -186,6 +189,10 @@ export class NgxCompactableRow implements AfterViewInit {
       ...state,
     }));
 
+    const sortedProjectedItems = [...projectedItemStatesCopy].sort(
+      (a, b) => b.template.priority() - a.template.priority() || a.id - b.id, // Preserve original order for items with the same priority
+    );
+
     let rootWidth =
       projectedItemStatesCopy
         .filter((item) => !item.isInMenu)
@@ -198,9 +205,9 @@ export class NgxCompactableRow implements AfterViewInit {
         : 0);
 
     if (rootWidth > availableWidth) {
-      let hasMenuItem = projectedItemStatesCopy.some((item) => item.isInMenu);
-      for (let i = projectedItemStatesCopy.length - 1; i >= 0; i--) {
-        const item = projectedItemStatesCopy[i];
+      let hasMenuItem = sortedProjectedItems.some((item) => item.isInMenu);
+      for (let i = sortedProjectedItems.length - 1; i >= 0; i--) {
+        const item = sortedProjectedItems[i];
         if (item.isInMenu) continue;
         rootWidth -= this.projectedItemWidths.get(item.id) ?? 0;
         item.isInMenu = true;
@@ -213,11 +220,11 @@ export class NgxCompactableRow implements AfterViewInit {
         if (rootWidth <= availableWidth) break;
       }
     } else {
-      let remainingMenuCount = projectedItemStatesCopy.filter(
+      let remainingMenuCount = sortedProjectedItems.filter(
         (item) => item.isInMenu,
       ).length;
-      for (let i = 0; i < projectedItemStatesCopy.length; i++) {
-        const item = projectedItemStatesCopy[i];
+      for (let i = 0; i < sortedProjectedItems.length; i++) {
+        const item = sortedProjectedItems[i];
         if (!item.isInMenu) continue;
         const itemWidth = this.projectedItemWidths.get(item.id) ?? 0;
         const menuRelease = remainingMenuCount === 1 ? menuButtonWidth : 0;

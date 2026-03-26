@@ -21,7 +21,11 @@
     >
       <ng-container
         [ngTemplateOutlet]="item.template.template"
-        [ngTemplateOutletContext]="{ location: 'toolbar', index: item.id }"
+        [ngTemplateOutletContext]="{
+          location: 'toolbar',
+          priority: item.template.priority(),
+          index: item.id,
+        }"
       ></ng-container>
     </span>
   }
@@ -35,7 +39,11 @@
       @for (item of projectedMenuItems(); track item.id) {
         <ng-container
           [ngTemplateOutlet]="item.template.template"
-          [ngTemplateOutletContext]="{ location: 'menu', index: item.id }"
+          [ngTemplateOutletContext]="{
+            location: 'menu',
+            priority: item.template.priority(),
+            index: item.id,
+          }"
         ></ng-container>
       }
     </ng-template>

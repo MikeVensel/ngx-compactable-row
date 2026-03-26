@@ -32,7 +32,13 @@ The toolbar now supports projected item templates in addition to `toolbarDefinit
 
 ```html
 <ngx-compactable-row>
-   <ng-template ngxCompactableItem let-location="location" let-index="index">
+   <ng-template
+      ngxCompactableItem
+      [priority]="2"
+      let-location="location"
+      let-priority="priority"
+      let-index="index"
+   >
       @if (location === 'menu') {
          <button mat-menu-item [attr.data-toolbar-location]="location">
             <mat-icon>share</mat-icon>
@@ -50,9 +56,10 @@ The toolbar now supports projected item templates in addition to `toolbarDefinit
 Template context values:
 
 - `location`: `'toolbar' | 'menu'`
+- `priority`: Priority from the directive input
 - `index`: zero-based item index
 
-When projected templates are present, the component automatically compacts items into the overflow menu and passes `location` so you can render different markup and set attributes accordingly.
+When projected templates are present, the component automatically compacts items into the overflow menu and passes `location` so you can render different markup and set attributes accordingly. Use `[priority]` to configure the item and `let-priority="priority"` to read that value inside the template.
 
 ### Publishing the Library
 

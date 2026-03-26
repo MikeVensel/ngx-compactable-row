@@ -11,22 +11,20 @@ Then add a compactable row with any number of elements.
 
 ```html
 <ngx-compactable-row>
-    <ng-template ngxCompactableItem let-location="location">
+    <ng-template ngxCompactableItem [priority]="1" let-location="location" let-priority="priority">
       @if (location === 'menu') {
         <button
           mat-menu-item
-          (click)="onShare()"
-          [disabled]="shareDisabledWriteable()"
+          (click)="onSave()"
           [attr.data-toolbar-location]="location"
         >
-          <mat-icon>share</mat-icon>
-          <span>Share</span>
+          <mat-icon>save</mat-icon>
+          <span>Save</span>
         </button>
       } @else {
         <button
           mat-icon-button
           (click)="onShare()"
-          [disabled]="shareDisabledWriteable()"
           [attr.data-toolbar-location]="location"
         >
           <mat-icon>share</mat-icon>
