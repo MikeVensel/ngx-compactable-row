@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [prepare, build, lint, test]
     steps:
-      - uses: DerYeger/yarn-setup-action@master
+      - uses: DerYeger/yarn-setup-action@v2.0.21
         with:
           node-version: 24.11.0
       - run: yarn build:lib
