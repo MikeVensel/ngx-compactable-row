@@ -119,6 +119,9 @@ export class NgxCompactableRow implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    // immediately set item visibility and then attach the resize observer when appropriate.
+    this.updateProjectedItemVisibilities();
+
     const attachObserver = () => {
       this.resizeObserver = new ResizeObserver(() => {
         if (this.shouldSkipNextResizeEvent) {
@@ -173,6 +176,12 @@ export class NgxCompactableRow implements AfterViewInit {
   private updateProjectedItemVisibilities(): void {
     const hostEl = this.elementRef.nativeElement as HTMLElement;
     const availableWidth = this.getAvailableWidth(hostEl) - this.buffer();
+
+    // Width may be temporarily unavailable before layout settles.
+    // In that case, keep current visibility state and wait for a measurable pass.
+    if (availableWidth <= 0) {
+      return;
+    }
 
     for (const observer of this.projectedToolbarItemObservers()) {
       const width = observer.width;
