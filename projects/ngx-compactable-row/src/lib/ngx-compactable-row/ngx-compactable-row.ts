@@ -137,6 +137,8 @@ export class NgxCompactableRow implements AfterViewInit {
 
     if (typeof requestAnimationFrame === 'function') {
       this.resizeObserverInitFrameId = requestAnimationFrame(() => {
+        // immediately set item visibility and then attach the resize observer when appropriate.
+        this.updateProjectedItemVisibilities();
         this.resizeObserverInitFrameId = undefined;
         attachObserver();
       });
@@ -172,7 +174,14 @@ export class NgxCompactableRow implements AfterViewInit {
 
   private updateProjectedItemVisibilities(): void {
     const hostEl = this.elementRef.nativeElement as HTMLElement;
-    const availableWidth = this.getAvailableWidth(hostEl) - this.buffer();
+    let availableWidth = this.getAvailableWidth(hostEl) - this.buffer();
+
+    // Width may be temporarily unavailable before layout settles.
+    // Treat negative widths as zero so the compaction logic still runs
+    // and items can be moved into the menu when there is no space.
+    if (availableWidth < 0) {
+      availableWidth = 0;
+    }
 
     for (const observer of this.projectedToolbarItemObservers()) {
       const width = observer.width;
