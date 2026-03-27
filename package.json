@@ -17,6 +17,7 @@
     "format": "oxfmt",
     "formt:check": "oxfmt --check",
     "publish:lib": "yarn build:lib && yarn --cwd dist/ngx-compactable-row npm publish --access public",
+    "bump-version": "commit-and-tag-version",
     "_rp": "run-p -ln --npm-path yarn"
   },
   "dependencies": {
@@ -36,6 +37,7 @@
     "@angular/build": "^21.2.3",
     "@angular/cli": "^21.1.2",
     "@angular/compiler-cli": "^21.1.0",
+    "commit-and-tag-version": "^12.7.1",
     "eslint": "^10.1.0",
     "eslint-plugin-jsdoc": "^62.8.0",
     "jsdom": "^28.0.0",
