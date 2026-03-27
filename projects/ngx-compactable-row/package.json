@@ -1,6 +1,6 @@
 {
   "name": "@relynn/ngx-compactable-row",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Angular Material compactable row",
   "homepage": "https://github.com/MikeVensel/ngx-compactable-row",
   "license": "MIT",
