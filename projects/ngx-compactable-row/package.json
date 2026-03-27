@@ -10,6 +10,9 @@
     "url": "https://github.com/MikeVensel/ngx-compactable-row.git"
   },
   "sideEffects": false,
+  "scripts": {
+    "commit-and-tag-version": "commit-and-tag-version"
+  },
   "dependencies": {
     "tslib": "^2.3.0"
   },

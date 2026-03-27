@@ -2,6 +2,9 @@
   "name": "ngx-mat-compactable-row",
   "version": "0.0.0",
   "private": true,
+  "workspaces": [
+    "projects/ngx-compactable-row"
+  ],
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -17,7 +20,7 @@
     "format": "oxfmt",
     "formt:check": "oxfmt --check",
     "publish:lib": "yarn build:lib && yarn --cwd dist/ngx-compactable-row npm publish --access public",
-    "bump-version": "commit-and-tag-version",
+    "bump-version": "yarn --cwd projects/ngx-compactable-row commit-and-tag-version",
     "_rp": "run-p -ln --npm-path yarn"
   },
   "dependencies": {
