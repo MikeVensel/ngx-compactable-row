@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "serve:demo": "wait-on dist/ngx-compactable-row/types/ngx-compactable-row.d.ts && ng serve",
+    "serve:demo": "wait-on dist/ngx-compactable-row/types/relynn-ngx-compactable-row.d.ts && ng serve",
     "watch:all": "yarn _rp serve:demo watch:lib",
     "build:lib": "ng build --project ngx-compactable-row",
     "watch:lib": "ng build --project ngx-compactable-row --watch --configuration development",
