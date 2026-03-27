@@ -19,7 +19,7 @@
     "lint:fix": "oxlint --fix",
     "format": "oxfmt",
     "formt:check": "oxfmt --check",
-    "publish:lib": "yarn build:lib && yarn test && cd dist/ngx-compactable-row && yarn npm publish --access public && cd ../../",
+    "publish:lib": "yarn build:lib && yarn test && cd dist/ngx-compactable-row && npm publish --access public",
     "bump-version": "yarn --cwd projects/ngx-compactable-row commit-and-tag-version",
     "_rp": "run-p -ln --npm-path yarn"
   },
