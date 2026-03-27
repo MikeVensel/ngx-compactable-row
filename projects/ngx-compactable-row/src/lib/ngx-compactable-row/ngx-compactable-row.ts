@@ -119,9 +119,6 @@ export class NgxCompactableRow implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // immediately set item visibility and then attach the resize observer when appropriate.
-    this.updateProjectedItemVisibilities();
-
     const attachObserver = () => {
       this.resizeObserver = new ResizeObserver(() => {
         if (this.shouldSkipNextResizeEvent) {
@@ -140,6 +137,8 @@ export class NgxCompactableRow implements AfterViewInit {
 
     if (typeof requestAnimationFrame === 'function') {
       this.resizeObserverInitFrameId = requestAnimationFrame(() => {
+        // immediately set item visibility and then attach the resize observer when appropriate.
+        this.updateProjectedItemVisibilities();
         this.resizeObserverInitFrameId = undefined;
         attachObserver();
       });
