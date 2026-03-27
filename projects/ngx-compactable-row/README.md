@@ -1,9 +1,17 @@
 # NgxCompactableRow
 
 NgxCompactableRow allows you to create a row of button elements which can automatically move into a menu if the screen becomes
-to small.
+to small. A basic demo is available at https://mikevensel.github.io/ngx-compactable-row/.
 
 ## Use
+
+Install with:
+
+```sh
+npm install @relynn/ngx-compactable-row
+# OR
+yarn add @relynn/ngx-compactable-row
+```
 
 Add the `NgxCompactableRow` and `NgxCompactableItemDirective` as imports to either your `app.module.ts` imports or your component's imports if using a standalone component.
 
