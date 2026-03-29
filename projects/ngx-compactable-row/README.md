@@ -52,3 +52,60 @@ Template context values:
 - `index`: Index assigned to the item.
 
 The component automatically compacts items into the overflow menu and passes `location` so you can render different markup and set attributes accordingly. Use `[priority]` to configure the item and `let-priority="priority"` to read that value inside the template.
+
+### Using mat-menu's in the row
+
+Angular Material's mat menu allows you to nest submenus within menus. However, attempting to do so in components like this one
+where the menu items might not be direct descendents of causes issues with behavior. This library attempts to patch it but it requires
+that you add a `mouseenter` event handler as shown below:
+
+```html
+<ngx-compactable-row #compactableRow>
+  <ng-template ngxCompactableItem let-location="location">
+    @if (location === 'menu') {
+      <button
+        #attachmentTrigger="matMenuTrigger"
+        #attachmentItem="matMenuItem"
+        mat-menu-item
+        [matMenuTriggerFor]="attachmentsMenu"
+        [attr.data-toolbar-location]="location"
+        (mouseenter)="compactableRow.openSubmenu(attachmentTrigger, attachmentItem)"
+      >
+        <mat-icon>attach_file</mat-icon>
+        <span>Attachments</span>
+      </button>
+    } @else {
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="attachmentsMenu"
+        [attr.data-toolbar-location]="location"
+      >
+        <mat-icon>attach_file</mat-icon>
+      </button>
+    }
+  </ng-template>
+</ngx-compactable-row>
+
+<mat-menu class="ngx-compactable-menu" #attachmentsMenu="matMenu">
+  <button mat-menu-item>
+    <span>Attachment 1</span>
+  </button>
+  <button mat-menu-item [matMenuTriggerFor]="attachmentTwoMenu">
+    <span>Attachment 2</span>
+  </button>
+  <button mat-menu-item>
+    <span>Attachment 3</span>
+  </button>
+</mat-menu>
+<mat-menu #attachmentTwoMenu="matMenu">
+  <button mat-menu-item>
+    <span>Attachment 2.1</span>
+  </button>
+  <button mat-menu-item>
+    <span>Attachment 2.2</span>
+  </button>
+  <button mat-menu-item>
+    <span>Attachment 2.3</span>
+  </button>
+</mat-menu>
+```
