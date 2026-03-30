@@ -265,7 +265,7 @@
   </button>
   <span>My App</span>
   <span class="example-spacer"></span>
-  <ngx-compactable-row #compactableRow>
+  <ngx-compactable-row #compactableRow checkAvailableSpaceAfterViewCheck>
     <ng-template ngxCompactableItem let-location="location">
       @if (location === 'menu') {
         <button mat-menu-item [attr.data-toolbar-location]="location">
@@ -327,28 +327,35 @@
         </button>
       }
     </ng-template>
-    <ng-template ngxCompactableItem [priority]="1" let-location="location" let-priority="priority">
-      @if (location === 'menu') {
-        <button
-          mat-menu-item
-          (click)="onShare()"
-          [disabled]="shareDisabledWriteable()"
-          [attr.data-toolbar-location]="location"
-        >
-          <mat-icon>share</mat-icon>
-          <span>Share</span>
-        </button>
-      } @else {
-        <button
-          mat-icon-button
-          (click)="onShare()"
-          [disabled]="shareDisabledWriteable()"
-          [attr.data-toolbar-location]="location"
-        >
-          <mat-icon>share</mat-icon>
-        </button>
-      }
-    </ng-template>
+    @if (showShare()) {
+      <ng-template
+        ngxCompactableItem
+        [priority]="1"
+        let-location="location"
+        let-priority="priority"
+      >
+        @if (location === 'menu') {
+          <button
+            mat-menu-item
+            (click)="onShare()"
+            [disabled]="shareDisabledWriteable()"
+            [attr.data-toolbar-location]="location"
+          >
+            <mat-icon>share</mat-icon>
+            <span>Share</span>
+          </button>
+        } @else {
+          <button
+            mat-icon-button
+            (click)="onShare()"
+            [disabled]="shareDisabledWriteable()"
+            [attr.data-toolbar-location]="location"
+          >
+            <mat-icon>share</mat-icon>
+          </button>
+        }
+      </ng-template>
+    }
 
     <ng-template ngxCompactableItem let-location="location">
       @if (location === 'menu') {
@@ -376,18 +383,20 @@
       }
     </ng-template>
 
-    <ng-template ngxCompactableItem let-location="location">
-      @if (location === 'menu') {
-        <button mat-menu-item (click)="onVisibility()" [attr.data-toolbar-location]="location">
-          <mat-icon>visibility</mat-icon>
-          <span>Visibility</span>
-        </button>
-      } @else {
-        <button mat-icon-button (click)="onVisibility()" [attr.data-toolbar-location]="location">
-          <mat-icon>visibility</mat-icon>
-        </button>
-      }
-    </ng-template>
+    @if (showVisibility()) {
+      <ng-template ngxCompactableItem let-location="location">
+        @if (location === 'menu') {
+          <button mat-menu-item (click)="onVisibility()" [attr.data-toolbar-location]="location">
+            <mat-icon>visibility</mat-icon>
+            <span>Visibility</span>
+          </button>
+        } @else {
+          <button mat-icon-button (click)="onVisibility()" [attr.data-toolbar-location]="location">
+            <mat-icon>visibility</mat-icon>
+          </button>
+        }
+      </ng-template>
+    }
     <ng-template ngxCompactableItem let-location="location">
       @if (location === 'menu') {
         <button

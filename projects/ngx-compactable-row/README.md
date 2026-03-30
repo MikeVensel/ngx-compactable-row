@@ -53,6 +53,10 @@ Template context values:
 
 The component automatically compacts items into the overflow menu and passes `location` so you can render different markup and set attributes accordingly. Use `[priority]` to configure the item and `let-priority="priority"` to read that value inside the template.
 
+### Check visibility after view check
+
+The `ngx-compactable-row` component checks the available size and moves items whenever it detects resize events. However, the available space may not be updated in some scenarios such as if the buttons are wrapped in an `@if` that may return true after available space has already been calculated. This can be fixed by running the visibility updates after each view check by setting `checkAvailableSpaceAfterViewCheck` on the `ngx-compactable-row` component. This will run the visibilty checks in the `ngAfterViewChecked` lifecycle hook.
+
 ### Using mat-menu's in the row
 
 Angular Material's mat menu allows you to nest submenus within menus. However, attempting to do so in components like this one
