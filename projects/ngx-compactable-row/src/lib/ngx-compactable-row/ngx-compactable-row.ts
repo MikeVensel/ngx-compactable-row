@@ -42,6 +42,12 @@ interface ProjectedItemState {
   template: NgxCompactableItemDirective;
 }
 
+/** Describes a partial implementation of MatMenuTrigger's internal API. */
+interface InternalOpenMenuTrigger {
+  /** Internal open method exposed by MatMenuTrigger. */
+  _openMenu: (autoFocus: boolean) => void;
+}
+
 /** Menu button position in the row. */
 export type MenuButtonPosition = 'start' | 'end';
 
@@ -197,6 +203,7 @@ export class NgxCompactableRow implements AfterViewInit {
 
   /**
    * Opens the given trigger's menu and attaches panel hover guards to prevent premature close.
+   *
    * @param trigger The menu trigger to open.
    * @param item The menu item associated with the trigger, used for applying highlight state while the menu is open.
    */
@@ -207,7 +214,7 @@ export class NgxCompactableRow implements AfterViewInit {
       previousMenu.trigger.closeMenu();
     }
 
-    trigger.openMenu();
+    this.openMenuForHover(trigger);
     this.activeMenu.set({ trigger, item });
 
     trigger.menuClosed.pipe(take(1)).subscribe(() => {
@@ -216,6 +223,27 @@ export class NgxCompactableRow implements AfterViewInit {
         this.activeMenu.set(null);
       }
     });
+  }
+
+  /**
+   * Opens the given trigger's menu as if it was hovered. This is intended to be used on menus that were added to the more menu
+   * as part of the effort to open submenus the same as material does it.
+   *
+   * @param trigger Menu trigger.
+   */
+  private openMenuForHover(trigger: MatMenuTrigger): void {
+    try {
+      // Cast the menu trigger to internal interface so the protected _openMenu function can be called.
+      const internalTrigger = trigger as unknown as InternalOpenMenuTrigger;
+      internalTrigger._openMenu(false);
+    } catch (error) {
+      // As a fallback, open the menu through the public API.
+      console.error(
+        'Failed to open submenu through internal API, falling back to public API.',
+        error,
+      );
+      trigger.openMenu();
+    }
   }
 
   private clearMenuItemHighlight(item: MatMenuItem): void {

@@ -109,3 +109,5 @@ that you add a `mouseenter` event handler as shown below:
   </button>
 </mat-menu>
 ```
+
+This functionality relies on Angular Materia's internal API to function correctly. If the internal API changes the default behavior for opening a menu will be present. This will function but some styling and behavior changes will occur if compared with how nested menus work outside this component.
