@@ -37,14 +37,17 @@
   <mat-menu #moreMenu="matMenu">
     <ng-template matMenuContent>
       @for (item of projectedMenuItems(); track item.id) {
-        <ng-container
-          [ngTemplateOutlet]="item.template.template"
-          [ngTemplateOutletContext]="{
-            location: 'menu',
-            priority: item.template.priority(),
-            index: item.id,
-          }"
-        ></ng-container>
+        <div (mouseenter)="closeSubmenu()">
+          <ng-container
+            [ngTemplateOutlet]="item.template.template"
+            [ngTemplateOutletInjector]="moreMenuInjector()"
+            [ngTemplateOutletContext]="{
+              location: 'menu',
+              priority: item.template.priority(),
+              index: item.id,
+            }"
+          ></ng-container>
+        </div>
       }
     </ng-template>
   </mat-menu>

@@ -7,9 +7,10 @@
   ],
   "scripts": {
     "ng": "ng",
+    "clean": "rimraf dist && ng cache clean",
     "start": "ng serve",
     "serve:demo": "wait-on dist/ngx-compactable-row/types/relynn-ngx-compactable-row.d.ts && ng serve",
-    "watch:all": "yarn _rp serve:demo watch:lib",
+    "watch:all": "yarn clean && yarn _rp serve:demo watch:lib",
     "build:lib": "ng build --project ngx-compactable-row",
     "watch:lib": "ng build --project ngx-compactable-row --watch --configuration development",
     "build:demo": "ng build --project demo-app",
@@ -19,7 +20,7 @@
     "lint:fix": "oxlint --fix",
     "format": "oxfmt",
     "formt:check": "oxfmt --check",
-    "publish:lib": "yarn build:lib && yarn test && cd dist/ngx-compactable-row && npm publish --access public",
+    "publish:lib": "yarn clean && yarn build:lib && yarn test && cd dist/ngx-compactable-row && npm publish --access public",
     "bump-version": "yarn --cwd projects/ngx-compactable-row commit-and-tag-version",
     "_rp": "run-p -ln --npm-path yarn"
   },
@@ -48,6 +49,7 @@
     "npm-run-all": "^4.1.5",
     "oxfmt": "^0.41.0",
     "oxlint": "^1.56.0",
+    "rimraf": "^6.1.3",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8",
     "wait-on": "^9.0.4"

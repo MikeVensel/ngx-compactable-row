@@ -1,4 +1,11 @@
-import { MatMenuModule } from '@angular/material/menu';
+import { take } from 'rxjs';
+import {
+  MatMenu,
+  MAT_MENU_PANEL,
+  MatMenuModule,
+  MatMenuTrigger,
+  MatMenuItem,
+} from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
 import {
@@ -9,11 +16,13 @@ import {
   ElementRef,
   effect,
   inject,
+  Injector,
   signal,
   untracked,
   viewChild,
   viewChildren,
   input,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 
@@ -31,6 +40,12 @@ interface ProjectedItemState {
   isInMenu: boolean;
   /** The template for the projected item. */
   template: NgxCompactableItemDirective;
+}
+
+/** Describes a partial implementation of MatMenuTrigger's internal API. */
+interface InternalOpenMenuTrigger {
+  /** Internal open method exposed by MatMenuTrigger. */
+  _openMenu: (autoFocus: boolean) => void;
 }
 
 /** Menu button position in the row. */
@@ -95,13 +110,31 @@ export class NgxCompactableRow implements AfterViewInit {
   showMenu = computed(() => this.projectedMenuItems().length > 0);
 
   private readonly elementRef = inject(ElementRef);
+  private readonly injectorRef = inject(Injector);
   private menuButtonElement = viewChild('menuButton', { read: ElementRef });
+  private moreMenu = viewChild<MatMenu>('moreMenu');
+  // private readonly hoveredMenuTrigger = signal<MatMenuTrigger | null>(null);
+  private activeMenu = signal<{
+    /** MatMenuTrigger associated with the active menu. */
+    trigger: MatMenuTrigger;
+    /** MatMenuItem associated with the active menu. */
+    item: MatMenuItem;
+  } | null>(null);
+  /** Injector providing this menu as the MAT_MENU_PANEL root for nested menu triggers. */
+  moreMenuInjector = computed(() => {
+    const menu = this.moreMenu();
+    if (!menu) return null;
+    return Injector.create({
+      providers: [{ provide: MAT_MENU_PANEL, useValue: menu }],
+      parent: this.injectorRef,
+    });
+  });
   private readonly projectedItemWidths = new Map<number, number>();
   private resizeObserver?: ResizeObserver;
   private resizeObserverInitFrameId?: number;
   private shouldSkipNextResizeEvent = true;
 
-  constructor() {
+  constructor(private cdr: ChangeDetectorRef) {
     effect(() => {
       const templates = this.projectedItemTemplates();
       const previous = new Map(
@@ -156,6 +189,82 @@ export class NgxCompactableRow implements AfterViewInit {
 
     this.resizeObserver?.disconnect();
     this.resizeObserver = undefined;
+  }
+
+  /** Closes the last active submenu. */
+  closeSubmenu(): void {
+    const activeMenu = this.activeMenu();
+    if (activeMenu) {
+      this.clearMenuItemHighlight(activeMenu.item);
+      activeMenu.trigger.closeMenu();
+      this.activeMenu.set(null);
+    }
+  }
+
+  /**
+   * Opens the given trigger's menu and attaches panel hover guards to prevent premature close.
+   *
+   * @param trigger The menu trigger to open.
+   * @param item The menu item associated with the trigger, used for applying highlight state while the menu is open.
+   */
+  openSubmenu(trigger: MatMenuTrigger, item: MatMenuItem): void {
+    const previousMenu = this.activeMenu();
+    if (previousMenu && previousMenu.trigger !== trigger) {
+      this.clearMenuItemHighlight(previousMenu.item);
+      previousMenu.trigger.closeMenu();
+    }
+
+    this.openMenuForHover(trigger);
+    this.activeMenu.set({ trigger, item });
+
+    trigger.menuClosed.pipe(take(1)).subscribe(() => {
+      this.clearMenuItemHighlight(item);
+      if (this.activeMenu()?.trigger === trigger) {
+        this.activeMenu.set(null);
+      }
+    });
+  }
+
+  /**
+   * Opens the given trigger's menu as if it was hovered. This is intended to be used on menus that were added to the more menu
+   * as part of the effort to open submenus the same as material does it.
+   *
+   * @param trigger Menu trigger.
+   */
+  private openMenuForHover(trigger: MatMenuTrigger): void {
+    try {
+      // Cast the menu trigger to internal interface so the protected _openMenu function can be called.
+      const internalTrigger = trigger as unknown as InternalOpenMenuTrigger;
+      internalTrigger._openMenu(false);
+    } catch (error) {
+      // As a fallback, open the menu through the public API.
+      console.error(
+        'Failed to open submenu through internal API, falling back to public API.',
+        error,
+      );
+      trigger.openMenu();
+    }
+  }
+
+  private clearMenuItemHighlight(item: MatMenuItem): void {
+    item._setHighlighted(false);
+
+    const hostElement = (
+      item as unknown as {
+        // oxlint-disable-next-line jsdoc-js/require-jsdoc
+        _elementRef?: ElementRef<HTMLElement>;
+      }
+    )._elementRef?.nativeElement;
+
+    if (hostElement) {
+      hostElement.classList.remove(
+        'mat-mdc-menu-item-highlighted',
+        'mat-menu-item-highlighted',
+      );
+      hostElement.blur();
+    }
+
+    this.cdr.markForCheck();
   }
 
   private getAvailableWidth(hostEl: HTMLElement): number {

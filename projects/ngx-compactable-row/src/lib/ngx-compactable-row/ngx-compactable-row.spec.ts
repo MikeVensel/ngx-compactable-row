@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 
@@ -155,6 +156,47 @@ describe('NgxCompactableRow', () => {
     expect(rowComponent.projectedMenuItems().map((item) => item.id)).toEqual([
       1, 2,
     ]);
+  });
+
+  it('opens hover menu through the internal trigger API with autofocus disabled', () => {
+    const trigger = {
+      _openMenu: vi.fn(),
+      openMenu: vi.fn(),
+    };
+
+    (
+      rowComponent as unknown as {
+        openMenuForHover: (menuTrigger: unknown) => void;
+      }
+    ).openMenuForHover(trigger);
+
+    expect(trigger._openMenu).toHaveBeenCalledTimes(1);
+    expect(trigger._openMenu).toHaveBeenCalledWith(false);
+    expect(trigger.openMenu).not.toHaveBeenCalled();
+  });
+
+  it('falls back to public menu opening when internal trigger API throws', () => {
+    const trigger = {
+      _openMenu: vi.fn(() => {
+        throw new Error('internal API failed');
+      }),
+      openMenu: vi.fn(),
+    };
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    (
+      rowComponent as unknown as {
+        openMenuForHover: (menuTrigger: unknown) => void;
+      }
+    ).openMenuForHover(trigger);
+
+    expect(trigger._openMenu).toHaveBeenCalledTimes(1);
+    expect(trigger._openMenu).toHaveBeenCalledWith(false);
+    expect(trigger.openMenu).toHaveBeenCalledTimes(1);
+    expect(consoleErrorSpy).toHaveBeenCalled();
+    consoleErrorSpy.mockRestore();
   });
 
   function setParentWidth(width: number): void {
