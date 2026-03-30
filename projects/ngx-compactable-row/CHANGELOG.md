@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.0](https://github.com/MikeVensel/ngx-compactable-row/compare/v1.1.0...v1.2.0) (2026-03-30)
+
+
+### Features
+
+* add ability to run visibility updates after view check ([#7](https://github.com/MikeVensel/ngx-compactable-row/issues/7)) ([3ee7402](https://github.com/MikeVensel/ngx-compactable-row/commit/3ee74027e0a914b25d258d5850f89d35a31ae85d))
+
 ## [1.1.1](https://github.com/MikeVensel/ngx-compactable-row/compare/v1.1.0...v1.1.1) (2026-03-30)
 
 ## 1.1.0 (2026-03-27)
