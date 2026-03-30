@@ -23,6 +23,8 @@ import {
   viewChildren,
   input,
   ChangeDetectorRef,
+  AfterViewChecked,
+  booleanAttribute,
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 
@@ -64,13 +66,21 @@ export type MenuButtonPosition = 'start' | 'end';
   templateUrl: './ngx-compactable-row.html',
   styleUrls: ['./ngx-compactable-row.scss'],
 })
-export class NgxCompactableRow implements AfterViewInit {
+export class NgxCompactableRow implements AfterViewChecked, AfterViewInit {
   /**
    * Extra buffer space in pixels to be subtracted from the available width when calculating item visibility.
    *
    * Defaults to 32.
    */
   buffer = input<number>(32);
+  /**
+   * Determines if available space should be checked during the view check lifecycle hook.
+   *
+   * This is useful if row elements may be added or removed dynamically.
+   */
+  checkAvailableSpaceAfterViewCheck = input(false, {
+    transform: booleanAttribute,
+  });
   /** Position of the menu button in the row. Defaults to end. */
   menuButtonPosition = input<MenuButtonPosition>('end');
   /** Projected toolbar items rendered from templates. */
@@ -149,6 +159,12 @@ export class NgxCompactableRow implements AfterViewInit {
         })),
       );
     });
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.checkAvailableSpaceAfterViewCheck()) {
+      this.updateProjectedItemVisibilities();
+    }
   }
 
   ngAfterViewInit(): void {
