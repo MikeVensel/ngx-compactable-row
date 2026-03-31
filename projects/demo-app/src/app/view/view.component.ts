@@ -2,7 +2,7 @@ import { map, timer } from 'rxjs';
 import {
   NgxCompactableRow,
   NgxCompactableItemDirective,
-} from 'ngx-compactable-row';
+} from 'ngx-compactable-row'; // The import outside this workspace is @relynn/ngx-compactable-row.
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
