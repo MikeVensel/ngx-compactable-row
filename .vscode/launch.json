@@ -4,20 +4,13 @@
   "configurations": [
     {
       "type": "msedge",
-      "name": "Launch Edge against localhost",
+      "name": "Ng serve and launch demo in edge",
       "request": "launch",
       "url": "http://localhost:4200",
       "webRoot": "${workspaceFolder}",
       "runtimeArgs": ["--inprivate"],
-      "preLaunchTask": "Angular Serve"
-    },
-    {
-      "name": "ng serve",
-      "type": "msedge",
-      "request": "launch",
-      "preLaunchTask": "npm: start",
-      "postDebugTask": "kill ng serve",
-      "url": "http://localhost:4200/"
+      "preLaunchTask": "Angular Serve",
+      "postDebugTask": "kill ng serve"
     },
     {
       "name": "Launch demo in edge",
