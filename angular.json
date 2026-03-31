@@ -16,7 +16,7 @@
       },
       "root": "projects/ngx-compactable-row",
       "sourceRoot": "projects/ngx-compactable-row/src",
-      "prefix": "lib",
+      "prefix": "ngx",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
