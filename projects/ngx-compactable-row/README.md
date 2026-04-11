@@ -3,6 +3,12 @@
 NgxCompactableRow allows you to create a row of button elements which can automatically move into a menu if the screen becomes
 to small. A basic demo is available at https://mikevensel.github.io/ngx-compactable-row/.
 
+## Angular Compatibility
+
+| Library Version | Angular Version |
+| --------------- | --------------- |
+| 1.x.x           | 21.x.x+         |
+
 ## Use
 
 Install with:
